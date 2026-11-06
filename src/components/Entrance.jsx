@@ -11,7 +11,7 @@ export default function Entrance({ children }) {
   const [phase, setPhase] = useState(reduce() ? 'landed' : 'wait')
   useEffect(() => {
     if (reduce()) return
-    const a = setTimeout(() => setPhase('fall'), 450), b = setTimeout(() => { setPhase('landed'); sfx.thud() }, 1350)
+    const a = setTimeout(() => setPhase('fall'), 150), b = setTimeout(() => { setPhase('landed'); sfx.thud() }, 750)
     return () => { clearTimeout(a); clearTimeout(b) }
   }, [])
   return (

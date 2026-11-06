@@ -191,3 +191,10 @@ body::before{animation:none;transform:perspective(420px) rotateX(64deg) translat
 .c-dark{stroke-width:3.5}.c-glow{stroke-width:1.1}
 .puff{width:46px;height:46px;margin:-23px}
 .seg{stroke-width:.8}.seg.black{fill:#0a0a10}.seg.red{fill:#c1222d}
+/* ---- Mehrspieler und Rangliste ---- */
+.room-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.room-code{font:800 2.2rem Fraunces,serif;letter-spacing:.3em;color:var(--gold);text-shadow:0 0 14px #f0bd4866}
+.members{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.member{background:var(--panel);border:1px solid var(--line);padding:.3rem .8rem;border-radius:99px;font-size:.9rem}.member.ok{border-color:#3fd07a;color:#9dffc4}
+.stats tr.me td{color:var(--gold);font-weight:700}
+.entrance.fall .dropper{animation-duration:.55s}

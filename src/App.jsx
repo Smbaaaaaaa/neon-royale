@@ -9,6 +9,10 @@ import Slots from './components/Slots.jsx'
 import Roulette from './components/Roulette.jsx'
 import { Shop, Inventory, Profile } from './components/Pages.jsx'
 import Entrance from './components/Entrance.jsx'
+import Blackjack from './components/Blackjack.jsx'
+import VideoPoker from './components/VideoPoker.jsx'
+import Multiplayer from './components/Multiplayer.jsx'
+import Leaderboard from './components/Leaderboard.jsx'
 
 function Welcome() {
   const { createGuest, error } = useWallet(); const [n, setN] = useState(''), [busy, setBusy] = useState(false)
@@ -58,12 +62,12 @@ export default function App() {
       <Route path="/spiele" element={<main><h1>Spiele</h1><GameGrid /></main>} />
       <Route path="/spiele/slots" element={<Entrance key="slots"><Slots /></Entrance>} />
       <Route path="/spiele/roulette" element={<Entrance key="roulette"><Roulette /></Entrance>} />
-      <Route path="/spiele/blackjack" element={<Entrance key="blackjack"><Maint title="Blackjack" /></Entrance>} />
-      <Route path="/spiele/poker" element={<Entrance key="poker"><Maint title="Video Poker" /></Entrance>} />
+      <Route path="/spiele/blackjack" element={<Entrance key="blackjack"><Blackjack /></Entrance>} />
+      <Route path="/spiele/poker" element={<Entrance key="poker"><VideoPoker /></Entrance>} />
       <Route path="/shop" element={<Shop />} />
       <Route path="/inventar" element={<Inventory />} />
-      <Route path="/multiplayer" element={<Soon title="Multiplayer" phase={5} />} />
-      <Route path="/rangliste" element={<Soon title="Rangliste" phase={5} />} />
+      <Route path="/multiplayer" element={<Multiplayer />} />
+      <Route path="/rangliste" element={<Leaderboard />} />
       <Route path="/profil" element={<Profile />} />
     </Routes>
   </>)

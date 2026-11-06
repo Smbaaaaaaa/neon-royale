@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useWallet } from '../context/Wallet.jsx'
 import { rnd } from '../games/slotLogic.js'
 import { sfx } from '../audio.js'
@@ -13,28 +13,51 @@ const OUT = [['red','Rot',n=>RED.has(n),2],['black','Schwarz',n=>n>0&&!RED.has(n
 const mult = (k, n) => (k[0] === 'n' ? (+k.slice(1) === n ? 36 : 0) : OUT.find(o => o[0] === k)[3] * +OUT.find(o => o[0] === k)[2](n))
 const A = 360 / 37
 const pt = (deg, r) => [r * Math.sin(deg * Math.PI / 180), -r * Math.cos(deg * Math.PI / 180)]
-export default function Roulette() {
+export default function Roulette({ room, onBet, onDone }) {
   const { p, adjust, refresh, playRoulette } = useWallet()
   const showWin = useWin()
   const [chip, setChip] = useState(5), [bets, setBets] = useState({}), [last, setLast] = useState({})
   const [rot, setRot] = useState(0), [ball, setBall] = useState(0), [busy, setBusy] = useState(false), [res, setRes] = useState(null), [hist, setHist] = useState([])
   const total = Object.values(bets).reduce((a, b) => a + b, 0)
-  const place = k => { if (busy || total + chip > p.coins) return; sfx.chip(); setBets(b => ({ ...b, [k]: (b[k] || 0) + chip })) }
+  const mine = !!room?.bets?.some(b => b.user_id === p.id), locked = !!room && (room.phase !== 'betting' || mine)
+  const place = k => { if (busy || locked || total + chip > p.coins) return; sfx.chip(); setBets(b => ({ ...b, [k]: (b[k] || 0) + chip })) }
+  const animate = (n, pay, stake, done) => {
+    const idx = ORDER.indexOf(n)
+    setBusy(true); setRes(null)
+    setRot(r => r + 1800 + ((((-idx * A - r) % 360) + 360) % 360)); setBall(b => b - 1440)
+    const tick = setInterval(sfx.tick, 110); setTimeout(() => clearInterval(tick), 4000)
+    setTimeout(() => {
+      if (pay) sfx.win(pay >= stake * 10 ? 'jackpot' : pay > stake ? 'big' : 'small'); else sfx.lose()
+      if (stake && pay > stake) showWin(pay - stake, tierOf(pay - stake, stake))
+      refresh(); setHist(h => [n, ...h].slice(0, 12)); setRes({ n, pay, stake }); setBets({}); setBusy(false); done?.()
+    }, 5300)
+  }
   const spin = async () => {
     if (busy || !total || total > p.coins) return
     sfx.unlock(); setBusy(true); setRes(null); setLast(bets)
     const stake = total, r = await playRoulette(bets)
     if (r.error) { setBusy(false); setRes({ err: r.error }); return }
-    const n = r.n, pay = Number(r.pay), idx = ORDER.indexOf(n)
-    adjust(-stake)
-    setRot(rot + 1800 + ((((-idx * A - rot) % 360) + 360) % 360)); setBall(ball - 1440)
-    const tick = setInterval(sfx.tick, 110); setTimeout(() => clearInterval(tick), 4000)
-    setTimeout(() => {
-      if (pay) sfx.win(pay >= stake * 10 ? 'jackpot' : pay > stake ? 'big' : 'small'); else sfx.lose()
-      if (pay > stake) showWin(pay - stake, tierOf(pay - stake, stake))
-      refresh(); setHist(h => [n, ...h].slice(0, 12)); setRes({ n, pay, stake }); setBets({}); setBusy(false)
-    }, 5300)
+    adjust(-stake); animate(r.n, Number(r.pay), stake)
   }
+  const placeRoom = async () => {
+    if (!total || locked || busy) return
+    const r = await onBet(bets)
+    if (r?.error) { setRes({ err: r.error }); return }
+    adjust(-total); setBets({}); setRes(null)
+  }
+  // Mehrspieler: Ergebnis kommt aus dem Raum, alle Spieler lassen die Kugel gleichzeitig rollen
+  const seen = useRef(null)
+  useEffect(() => {
+    if (!room) return
+    if (room.phase === 'betting') seen.current = room.round
+    else if (room.phase === 'result' && room.result != null) {
+      if (seen.current === room.round) {
+        seen.current = null
+        const me = (room.payouts || []).find(x => x.user_id === p.id)
+        animate(room.result, me ? Number(me.pay) : 0, me ? Number(me.stake) : 0, () => onDone?.(room.round))
+      } else onDone?.(room.round)
+    }
+  }, [room?.phase, room?.round, room?.result])
   const Chip = ({ k }) => (bets[k] ? <i className="chipb">{bets[k]}</i> : null)
   return (
     <main className="table-page">
@@ -64,7 +87,8 @@ export default function Roulette() {
       </div>
       <BetBar bet={chip} setBet={setChip} disabled={busy} coins={p.coins} label="Chipwert" />
       <div className="row center">
-        <button className="btn" onClick={spin} disabled={busy || !total || total > p.coins}>Drehen, {total} NC</button>
+        {room ? <button className="btn" onClick={placeRoom} disabled={busy || locked || !total || total > p.coins}>{mine ? 'Wetten abgegeben' : `Wetten abgeben, ${total} NC`}</button>
+          : <button className="btn" onClick={spin} disabled={busy || !total || total > p.coins}>Drehen, {total} NC</button>}
         <button className="btn ghost" onClick={() => setBets({})} disabled={busy || !total}>Löschen</button>
         <button className="btn ghost" onClick={() => setBets(last)} disabled={busy || !Object.keys(last).length}>Letzte Wetten</button>
       </div>
