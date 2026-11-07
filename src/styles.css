@@ -198,3 +198,35 @@ body::before{animation:none;transform:perspective(420px) rotateX(64deg) translat
 .member{background:var(--panel);border:1px solid var(--line);padding:.3rem .8rem;border-radius:99px;font-size:.9rem}.member.ok{border-color:#3fd07a;color:#9dffc4}
 .stats tr.me td{color:var(--gold);font-weight:700}
 .entrance.fall .dropper{animation-duration:.55s}
+/* ---- Texas Hold'em ---- */
+.felt.hold{padding-bottom:1rem}.pot{text-align:center;color:#ffe9a0;margin-bottom:.8rem}.pot b{font-size:1.3rem;color:var(--gold)}
+.board{justify-content:center;margin-bottom:1rem}
+.seats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.5rem;margin:.8rem 0}
+.seat{background:#0a2a21;border:2px solid #1f6b52;border-radius:12px;padding:.5rem .7rem;display:grid;gap:.1rem;font-size:.9rem;transition:box-shadow .2s,opacity .2s}
+.seat b{color:#fff}.seat span{color:var(--gold);font-weight:600}.seat em{font-style:normal;color:#bfe9d8;font-size:.8rem}
+.seat.me{border-color:var(--violet)}.seat.turn{border-color:var(--gold);box-shadow:0 0 18px #f0bd48aa}.seat.fold{opacity:.45}
+.hlog{margin-top:.8rem;font-size:.85rem;color:#bfe9d8;text-align:center;min-height:2.5rem}
+.actions{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;align-items:flex-start;margin-bottom:1rem}.raise{display:grid;gap:.5rem;flex-basis:100%;max-width:440px;margin:0 auto}
+.raise input[type=range],.seatpanel input[type=range]{width:100%;accent-color:var(--pink)}
+.seatpanel{display:grid;gap:.8rem;margin-top:1rem}.seatpanel select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:.3rem}
+/* ---- Runder Hold'em-Tisch ---- */
+.ptable{position:relative;width:100%;max-width:860px;margin:1.2rem auto 1rem;aspect-ratio:16/10.5}
+.pfelt{position:absolute;inset:14% 8%;border-radius:50%;background:radial-gradient(ellipse at 50% 38%,#17745a,#0a3328 75%);border:9px solid #5a2c10;box-shadow:0 0 0 3px var(--gold),0 26px 50px #000c,inset 0 0 70px #000b,0 0 40px #ff3d9a33}
+.pcenter{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52%;text-align:center}
+.pcenter .pot{margin-bottom:.4rem;font-size:clamp(.7rem,2vw,1rem)}
+.ptable .board{flex-wrap:nowrap;justify-content:center;gap:.25rem;min-height:0}
+.ptable .board .card{width:clamp(28px,7vw,58px)}.ptable .board .card b{font-size:clamp(.75rem,2.4vw,1.35rem)}.ptable .board .card span{font-size:clamp(.75rem,2.3vw,1.3rem)}
+.pseat{position:absolute;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:1px;min-width:78px;max-width:22%;padding:.3rem .5rem;border-radius:12px;background:#0c0614dd;border:2px solid #3b2a63;text-align:center;z-index:2;transition:box-shadow .2s,opacity .2s,border-color .2s}
+.pseat.me{border-color:var(--violet)}.pseat.turn{border-color:var(--gold);box-shadow:0 0 20px #f0bd48cc}.pseat.fold{opacity:.5}.pseat.win{border-color:var(--gold);box-shadow:0 0 26px #ffd04a}
+.pname{font-weight:700;font-size:clamp(.7rem,1.9vw,.95rem);color:#fff;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pstack{color:var(--gold);font-weight:600;font-size:clamp(.65rem,1.7vw,.85rem)}.pwin{color:#9dffc4;font-weight:800;font-size:.85rem}.phand{color:#bfe9d8;font-size:.7rem}
+.dbtn{display:inline-grid;place-items:center;width:1.2em;height:1.2em;margin-left:.3em;border-radius:50%;background:#fff;color:#111;font-size:.7em;font-weight:800;vertical-align:middle}
+.pcards{display:flex;justify-content:center;margin-bottom:2px}.pcards .mc+.mc{margin-left:-6px}
+.mc{width:clamp(20px,4vw,28px);aspect-ratio:5/7;border-radius:4px;background:#fff;color:#14141c;display:grid;place-items:center;align-content:center;font-family:Fraunces,serif;line-height:1;box-shadow:0 3px 6px #000a;animation:deal .35s both}
+.mc b{font-size:.78em}.mc span{font-size:.8em}.mc{font-size:clamp(.6rem,1.6vw,.85rem)}
+.mc.red{color:#d41f2d}.mc.back{background:repeating-linear-gradient(45deg,#3a1470 0 4px,#5a1f9a 4px 8px);border:2px solid var(--pink)}
+.mc:nth-child(1){transform:rotate(-5deg)}.mc:nth-child(2){transform:rotate(5deg)}
+.mc.big{width:clamp(34px,8vw,52px);font-size:clamp(.85rem,2.4vw,1.2rem)}
+.pbet{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:.25rem;z-index:1;font-weight:700;font-size:clamp(.65rem,1.7vw,.85rem);color:#fff;text-shadow:0 1px 3px #000}
+.pbet i{width:14px;height:14px;border-radius:50%;background:radial-gradient(#ffe27a,#d9a21f);border:2px dashed #fff8;box-shadow:0 2px 3px #000a}
+@media(max-width:620px){.ptable{aspect-ratio:1/1.15}.pfelt{inset:12% 3%}.pseat{min-width:62px;padding:.2rem .3rem}.pcenter{width:64%}}

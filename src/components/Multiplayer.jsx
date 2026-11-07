@@ -3,6 +3,7 @@ import { supabase } from '../supabase.js'
 import { useWallet } from '../context/Wallet.jsx'
 import Roulette from './Roulette.jsx'
 import PokerRoom from './PokerRoom.jsx'
+import HoldemRoom from './HoldemRoom.jsx'
 export default function Multiplayer() {
   const { p, call } = useWallet()
   const [code, setCode] = useState(() => localStorage.getItem('nr-room') || ''), [input, setInput] = useState('')
@@ -18,7 +19,7 @@ export default function Multiplayer() {
     if (!code) return
     load(code)
     const ch = supabase.channel('room-' + code)
-    for (const table of ['rooms', 'room_members', 'room_bets'])
+    for (const table of ['rooms', 'room_members', 'room_bets', 'holdem_seats'])
       ch.on('postgres_changes', { event: '*', schema: 'public', table, filter: `code=eq.${code}` }, () => load(code))
     ch.subscribe()
     const poll = setInterval(() => load(code), 4000) // Sicherheitsnetz, falls Echtzeit mal ausfällt
@@ -39,6 +40,7 @@ export default function Multiplayer() {
       <div className="grid">
         <section className="tile"><h2>Roulette-Raum</h2><p>Alle setzen auf denselben Tisch, der Gastgeber dreht, bis zu 8 Spieler.</p><button className="btn" onClick={() => create('roulette')} disabled={wait}>Roulette-Raum erstellen</button></section>
         <section className="tile"><h2>Poker-Raum</h2><p>Five Card Draw gegeneinander um einen gemeinsamen Pot, 2 bis 5 Spieler.</p><button className="btn" onClick={() => create('poker')} disabled={wait}>Poker-Raum erstellen</button></section>
+        <section className="tile"><h2>Texas Hold'em</h2><p>Echtes Hold'em mit Blinds, Erhöhen und All-in, bis zu 9 Spieler.</p><button className="btn" onClick={() => create('holdem')} disabled={wait}>Hold'em-Raum erstellen</button></section>
         <section className="tile"><h2>Raum beitreten</h2><p>Gib den Code deines Freundes ein.</p>
           <div className="row"><input value={input} onChange={e => setInput(e.target.value.toUpperCase())} maxLength={5} placeholder="CODE" aria-label="Raumcode" style={{ width: '7rem', textTransform: 'uppercase' }} />
             <button className="btn" onClick={join} disabled={wait || input.trim().length < 5}>Beitreten</button></div></section>
@@ -51,12 +53,12 @@ export default function Multiplayer() {
   return (
     <main className="table-page">
       <div className="room-head">
-        <div><small className="muted">{poker ? 'Poker-Raum' : 'Roulette-Raum'}, Code</small><div className="room-code">{room.code}</div></div>
+        <div><small className="muted">{room.game === 'holdem' ? "Texas Hold'em" : poker ? 'Poker-Raum' : 'Roulette-Raum'}, Code</small><div className="room-code">{room.code}</div></div>
         <div className="row"><button className="btn sm ghost" onClick={() => navigator.clipboard?.writeText(room.code)}>Code kopieren</button><button className="btn sm ghost" onClick={leave}>{host ? 'Raum schließen' : 'Verlassen'}</button></div>
       </div>
       <div className="members">{room.members.map(m => <span key={m.user_id} className={'member' + (ready(m.user_id) ? ' ok' : '')}>
         {m.name}{m.user_id === room.host ? ' (Gastgeber)' : ''}{ready(m.user_id) ? ' ✓' : ''}</span>)}</div>
-      {poker ? <PokerRoom room={room} act={act} busy={wait} /> : <>
+      {room.game === 'holdem' ? <HoldemRoom room={room} act={act} busy={wait} /> : poker ? <PokerRoom room={room} act={act} busy={wait} /> : <>
         <Roulette room={room} onBet={b => call('room_bet', { p_code: room.code, p_bets: b })} onDone={setRevealed} />
         <div className="row center">
           {host && room.phase === 'betting' && <button className="btn" onClick={() => act('room_spin')} disabled={wait || !room.bets.length}>Kugel rollen lassen</button>}
