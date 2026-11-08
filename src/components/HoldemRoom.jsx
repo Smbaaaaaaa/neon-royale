@@ -3,6 +3,7 @@ import { useWallet } from '../context/Wallet.jsx'
 import { sfx } from '../audio.js'
 import { SUITS, rankLabel } from '../games/cards.js'
 import Card from './Card.jsx'
+import Avatar from './Avatar.jsx'
 import { useWin, tierOf } from './WinBanner.jsx'
 const HANDS = ['Hohe Karte', 'Ein Paar', 'Zwei Paare', 'Drilling', 'Straße', 'Flush', 'Full House', 'Vierling', 'Straight Flush']
 const BBS = [10, 20, 50, 100, 200, 500, 1000]
@@ -66,6 +67,7 @@ export default function HoldemRoom({ room, act, busy }) {
                 style={pos(i, order.length)}>
                 {cards && <div className="pcards">{cards.map((c, k) => <MC key={k + (faceUp ? 'u' : 'd')} c={faceUp ? c : null} big={mine} />)}</div>}
                 <div className="pname">{s.name}{room.btn === s.seat && <span className="dbtn">D</span>}</div>
+                <Avatar size={30} frame={s.eq?.frame || 'silverline'} avatar={s.eq?.avatar || 'ace-of-spades'} />
                 <div className="pstack">{fmt(s.stack)}{s.allin && s.in_hand ? ' · All-in' : ''}</div>
                 {won && <div className="pwin">+{fmt(pay.won)}</div>}
                 {pay?.hole && !pay.folded && <div className="phand">{HANDS[pay.cat]}</div>}

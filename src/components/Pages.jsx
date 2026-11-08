@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import { useWallet } from '../context/Wallet.jsx'
-import { ITEMS, TYPES, glyphOf } from '../games/items.js'
+import { ITEMS, TYPES, RAR, RARITY, ACCENTS } from '../games/items.js'
 import { games } from '../games/registry.js'
 import { sfx } from '../audio.js'
 import Coin from './Coin.jsx'
-import { useWin } from './WinBanner.jsx'
 import Avatar from './Avatar.jsx'
-const Preview = ({ it }) => it.type === 'frame' ? <Avatar size={56} frame={it.val} avatar="default" /> : it.type === 'avatar'
-  ? <Avatar size={56} frame="none" avatar={it.val} /> : <div className={'swatch skin-' + it.val} />
-const Price = ({ n }) => <span className="price"><Coin size={18} />{n}</span>
+import { useWin } from './WinBanner.jsx'
+const Preview = ({ it }) => it.type === 'avatar' ? <Avatar size={64} frame="silverline" avatar={it.val} />
+  : it.type === 'frame' ? <Avatar size={64} frame={it.val} avatar="ace-of-spades" />
+  : it.type === 'bg' ? <div className="bgprev" data-bg={it.val} /> : <div className="accsw" style={{ background: ACCENTS[it.val] }} />
+const Price = ({ n }) => <span className="price"><Coin size={18} />{n.toLocaleString('de-DE')}</span>
+const Badge = ({ r }) => <span className={'rar r-' + r}>{RAR[r]}</span>
+const sorted = l => [...l].sort((a, b) => RARITY.indexOf(a.rarity) - RARITY.indexOf(b.rarity) || a.price - b.price)
 
 export function Shop() {
-  const { p, buy } = useWallet(); const showWin = useWin(); const [tab, setTab] = useState('frame')
+  const { p, buy } = useWallet(); const showWin = useWin(); const [tab, setTab] = useState('avatar')
   const starter = ITEMS[0], got = p.inv.includes('starter3')
   return (
     <main><h1>Item-Shop</h1>
@@ -20,28 +23,26 @@ export function Shop() {
         <button className="btn" disabled={got} onClick={async () => { if (await buy('starter3')) { sfx.win('jackpot'); showWin(starter.bonus, 'jackpot', 'STARTER-BONUS') } }}>{got ? 'Eingelöst' : '10.000 NC abholen'}</button>
       </section>
       <div className="tabs" role="tablist">{Object.entries(TYPES).map(([k, l]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{l}</button>)}</div>
-      <div className="grid">{ITEMS.filter(i => i.type === tab && !i.default).map(it => {
+      <div className="grid">{sorted(ITEMS.filter(i => i.type === tab && !i.default)).map(it => {
         const own = p.inv.includes(it.id)
-        return <article key={it.id} className="tile item"><Preview it={it} /><h2>{it.name}</h2>
+        return <article key={it.id} className={'tile item r-' + it.rarity}><Preview it={it} /><h2>{it.name}</h2><Badge r={it.rarity} />
           {own ? <span className="tag">Im Inventar</span> : <Price n={it.price} />}
           <button className="btn sm" disabled={own || p.coins < it.price} onClick={async () => { (await buy(it.id)) && sfx.win('small') }}>{own ? 'Gekauft' : p.coins < it.price ? 'Zu wenig NC' : 'Kaufen'}</button></article>
       })}</div>
-      <p className="muted">Neon Coins sind reine Spielwährung ohne Echtgeldwert und nur für kosmetische Items.</p>
+      <p className="muted">Weitere Kategorien folgen: Kartenrücken, Tischfilz, Chips, Würfel, Animationen und Namenseffekte. Neon Coins sind reine Spielwährung ohne Echtgeldwert.</p>
     </main>
   )
 }
 export function Inventory() {
   const { p, equip } = useWallet()
-  const mine = ITEMS.filter(i => i.type !== 'bonus' && (i.default || p.inv.includes(i.id)))
   return (
     <main><h1>Inventar</h1>
       {Object.entries(TYPES).map(([t, label]) => <section key={t}><h2 className="sec">{label}</h2>
-        <div className="grid">{mine.filter(i => i.type === t).map(it => {
+        <div className="grid">{sorted(ITEMS.filter(i => i.type === t && (i.default || p.inv.includes(i.id)))).map(it => {
           const on = p.eq[t] === it.val
-          return <article key={it.id} className={'tile item' + (on ? ' on' : '')}><Preview it={it} /><h2>{it.name}</h2>
+          return <article key={it.id} className={'tile item r-' + it.rarity + (on ? ' on' : '')}><Preview it={it} /><h2>{it.name}</h2><Badge r={it.rarity} />
             <button className="btn sm ghost" disabled={on} onClick={() => equip(t, it.val)}>{on ? 'Ausgerüstet' : 'Ausrüsten'}</button></article>
         })}</div></section>)}
-      <p className="muted">Automaten-Skins siehst du an der Slot Machine, Avatar und Rahmen in Lobby und Profil.</p>
     </main>
   )
 }

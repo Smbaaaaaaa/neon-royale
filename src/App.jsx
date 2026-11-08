@@ -1,5 +1,6 @@
 import { Routes, Route, Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { applyTheme } from './theme.js'
 import { useWallet } from './context/Wallet.jsx'
 import { games } from './games/registry.js'
 import Nav from './components/Nav.jsx'
@@ -53,6 +54,7 @@ const Soon = ({ title, phase }) => <main><h1>{title}</h1><p className="muted">Di
 
 export default function App() {
   const { p, ready } = useWallet()
+  useEffect(() => { if (p) applyTheme(p.eq) }, [p?.eq?.bg, p?.eq?.accent])
   if (!ready) return <main className="welcome"><Coin size={90} spin /></main>
   if (!p) return <Welcome />
   return (<>
