@@ -28,7 +28,7 @@ export const ITEMS = [
   {collection: 'toxic', type: 'avatar', val: 'fools-crown', name: "Fool's Crown", rarity: 'legendary', id: 'avatar-fools-crown', price: 25000, default: false},
   {type: 'avatar', val: 'noir', name: 'NOIR', rarity: 'mythic', id: 'avatar-noir', price: 50000, default: false},
   {type: 'avatar', val: 'the-house', name: 'THE HOUSE', rarity: 'mythic', id: 'avatar-the-house', price: 50000, default: false},
-  {collection: 'toxic', type: 'avatar', val: 'the-last-love', name: 'The Last Love', rarity: 'mythic', id: 'avatar-the-last-love', price: 50000, default: false},
+  {collection: 'toxic', type: 'avatar', val: 'the-last-love', name: 'The Last Laugh', rarity: 'mythic', id: 'avatar-the-last-love', price: 50000, default: false},
   {type: 'avatar', val: 'void', name: 'Void', rarity: 'mythic', id: 'avatar-void', price: 50000, default: false},
   {type: 'avatar', val: 'chrome-walker', name: 'Chrome Walker', rarity: 'mythic', id: 'avatar-chrome-walker', price: 50000, default: false},
   {type: 'frame', val: 'silverline', name: 'Silverline', rarity: 'common', default: true, id: 'frame-silverline', price: 0},
