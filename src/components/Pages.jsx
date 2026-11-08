@@ -25,12 +25,37 @@ function Preview({ it }) {
 }
 const Price = ({ n }) => <span className="price"><Coin size={18} />{fmt(n)}</span>
 const Badge = ({ r }) => <span className={'rar r-' + r}>{RAR[r]}</span>
+const MYSTERY = { cost: 2500, odds: [['common', 55], ['rare', 28], ['epic', 11], ['legendary', 5], ['mythic', 1]] }
+function MysteryBox() {
+  const { p, call, refresh } = useWallet(); const [st, setSt] = useState(null)
+  const open = async () => {
+    sfx.unlock(); sfx.chip(); setSt({ phase: 'shake' })
+    const [r] = await Promise.all([call('open_mystery_box'), new Promise(res => setTimeout(res, 1500))])
+    if (r?.error) { setSt({ phase: 'error', msg: r.error }); return }
+    sfx.win({ common: 'small', rare: 'small', epic: 'big', legendary: 'big', mythic: 'jackpot' }[r.rarity]); refresh(); setSt({ phase: 'result', r })
+  }
+  const it = st?.r && ITEMS.find(i => i.id === st.r.item)
+  return (
+    <section className="tile big mbox-tile">
+      <svg className="mbox-ico" viewBox="0 0 100 100" aria-hidden="true"><path d="M14 40H86V86H14Z" fill="#17171b" stroke="#aeb2b9" strokeWidth="2" /><path d="M10 28H90V42H10Z" fill="#202025" stroke="#c9ccd2" strokeWidth="2" /><path d="M46 28H54V86H46Z" fill="#8d9199" /><text x="50" y="72" textAnchor="middle" fontSize="26" fontFamily="Fraunces,serif" fontWeight="800" fill="#e7e9ec">?</text></svg>
+      <div><h2>Mystery Box</h2>
+        <p>Ein zufälliges Item aus allen Kategorien. Chancen: {MYSTERY.odds.map(([r, c]) => `${RAR[r]} ${c} %`).join(', ')}. Die Toxic Collection ist nicht enthalten. Ist eine Stufe komplett in deinem Besitz, bekommst du 30 % des Preises zurück.</p></div>
+      <button className="btn" disabled={p.coins < MYSTERY.cost || !!st} onClick={open}>Öffnen, {fmt(MYSTERY.cost)} NC</button>
+      {st && <div className="mbox-overlay" role="dialog" aria-label="Mystery Box">
+        {st.phase === 'shake' && <><svg className="mbox-big shake" viewBox="0 0 100 100"><path d="M14 40H86V86H14Z" fill="#17171b" stroke="#aeb2b9" strokeWidth="2" /><path d="M10 28H90V42H10Z" fill="#202025" stroke="#c9ccd2" strokeWidth="2" /><path d="M46 28H54V86H46Z" fill="#8d9199" /><text x="50" y="72" textAnchor="middle" fontSize="26" fontFamily="Fraunces,serif" fontWeight="800" fill="#e7e9ec">?</text></svg><p>Die Box wird geöffnet …</p></>}
+        {st.phase === 'error' && <><p>{st.msg}</p><button className="btn" onClick={() => setSt(null)}>Schließen</button></>}
+        {st.phase === 'result' && it && <div className={'mbox-result r-' + it.rarity}><Badge r={it.rarity} /><Preview it={it} /><h2>{it.name}</h2><p className="muted">{TYPES[it.type]}</p>
+          <p>{st.r.duplicate ? `Schon vorhanden. Du bekommst ${fmt(st.r.refund)} NC zurück.` : 'Neu in deinem Inventar!'}</p><button className="btn" onClick={() => setSt(null)}>Weiter</button></div>}
+      </div>}
+    </section>
+  )
+}
 const sorted = l => [...l].sort((a, b) => RARITY.indexOf(a.rarity) - RARITY.indexOf(b.rarity) || a.price - b.price)
 
 export function Shop() {
   const { p, buy } = useWallet(); const showWin = useWin()
   const [tab, setTab] = useState('avatar'), [view, setView] = useState('shop')
-  const starter = ITEMS[0], got = p.inv.includes('starter3')
+  const bonuses = ITEMS.filter(i => i.type === 'bonus')
   const list = ITEMS.filter(i => i.type === tab && !i.default && !i.collection)
   const toxic = sorted(ITEMS.filter(i => i.collection === 'toxic'))
   const card = it => {
@@ -42,10 +67,12 @@ export function Shop() {
   }
   return (
     <main><h1>Item-Shop</h1>
-      <section className="tile big starter">
-        <Coin size={64} spin /><div><h2>{starter.name}</h2><p>{starter.desc}. Einmal pro Konto.</p></div>
-        <button className="btn" disabled={got} onClick={async () => { if (await buy('starter3')) { sfx.win('jackpot'); showWin(starter.bonus, 'jackpot', 'STARTER-BONUS') } }}>{got ? 'Eingelöst' : '10.000 NC abholen'}</button>
-      </section>
+      {bonuses.map(b => { const got = p.inv.includes(b.id); return (
+        <section key={b.id} className="tile big starter">
+          <Coin size={64} spin /><div><h2>{b.id === 'starter3' ? 'Starter-Bonus' : 'Bonus'}</h2><p>{b.desc}. Einmal pro Konto.</p></div>
+          <button className="btn" disabled={got} onClick={async () => { if (await buy(b.id)) { sfx.win('jackpot'); showWin(b.bonus, 'jackpot', b.id === 'starter3' ? 'STARTER-BONUS' : 'BONUS') } }}>{got ? 'Eingelöst' : `${fmt(b.bonus)} NC abholen`}</button>
+        </section>) })}
+      <MysteryBox />
       <div className="views"><button className={view === 'shop' ? 'on' : ''} onClick={() => setView('shop')}>Kategorien</button>
         <button className={'tox' + (view === 'toxic' ? ' on' : '')} onClick={() => setView('toxic')}>Toxic Collection</button></div>
       {view === 'toxic' ? (
@@ -94,7 +121,7 @@ export function Profile() {
       <div><form onSubmit={async e => { e.preventDefault(); const b = await rename(n); if (b) { sfx.win('jackpot'); showWin(b, 'jackpot', 'NACHSCHUB') } }}><input value={n} maxLength={16} onChange={e => setN(e.target.value)} aria-label="Spielername" />
         <button className="btn sm ghost" disabled={!n.trim() || n.trim() === p.name}>Umbenennen</button></form>
         <p className="wallet inl"><Coin size={26} /><b>{p.coins}</b><small>NC</small></p>
-        <p className="muted">{p.inv.filter(i => i !== 'starter3').length} Items freigeschaltet</p></div></div>
+        <p className="muted">{p.inv.filter(i => !['starter3', 'bonus-15k'].includes(i)).length} Items freigeschaltet</p></div></div>
       <h2 className="sec">Statistiken</h2>
       <table className="stats"><thead><tr><th>Spiel</th><th>Runden</th><th>Gewonnen</th><th>Quote</th><th>Bester Gewinn</th></tr></thead><tbody>
         {games.map(g => { const s = p.stats[g.id] || { rounds: 0, wins: 0, best: 0 }

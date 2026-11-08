@@ -465,3 +465,30 @@ html[data-chip="clown-chip"],.chipprev[data-chip="clown-chip"]{--chip-bg:repeati
 .tile.item.toxic{border-top-color:#8a1220}
 
 .avatar img{width:100%;height:100%;display:block;border-radius:50%;object-fit:cover;user-select:none}
+
+/* ---- Edle Tische: glänzendes Holz, Spiegelungen, Details ---- */
+.rail{position:relative;padding:14px;border-radius:30px;margin-bottom:1rem;background:linear-gradient(135deg,#ffffff3d 0%,transparent 22%,transparent 70%,#0000008c 100%),repeating-linear-gradient(90deg,#00000018 0 1px,transparent 1px 22px),repeating-linear-gradient(88deg,#3d2213 0 3px,#2d180c 3px 7px,#49291a 7px 9px,#34200f 9px 13px);box-shadow:0 22px 44px #000c,inset 0 1px 0 #ffffff66,inset 0 -4px 8px #000a,inset 0 0 0 1px #000}
+.rail::before{content:"";position:absolute;inset:0;border-radius:30px;pointer-events:none;z-index:2;background:radial-gradient(circle at 16px 16px,#f1dfa0 0 2.5px,#8a6a1c 3.5px,transparent 4.5px),radial-gradient(circle at calc(100% - 16px) 16px,#f1dfa0 0 2.5px,#8a6a1c 3.5px,transparent 4.5px),radial-gradient(circle at 16px calc(100% - 16px),#f1dfa0 0 2.5px,#8a6a1c 3.5px,transparent 4.5px),radial-gradient(circle at calc(100% - 16px) calc(100% - 16px),#f1dfa0 0 2.5px,#8a6a1c 3.5px,transparent 4.5px)}
+.rail::after,.prail::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(105deg,transparent 42%,#ffffff2e 50%,transparent 58%) 0 0/300% 100%;animation:railsheen 14s ease-in-out infinite}
+@keyframes railsheen{0%{background-position:120% 0}60%,100%{background-position:-120% 0}}
+.rail .felt{margin-bottom:0;border-radius:18px;border-width:0;box-shadow:inset 0 0 60px #000b,inset 0 6px 18px #0009,0 0 0 2px #000a,0 0 0 3px #c9ccd222}
+.felt::after,.pfelt::after{content:"NEON ROYALE";position:absolute;inset:0;display:grid;place-items:center;border-radius:inherit;pointer-events:none;font:800 clamp(1rem,4.5vw,2.4rem)/1 Fraunces,serif;letter-spacing:.35em;color:#ffffff0c;background:radial-gradient(ellipse at 50% 0%,#ffffff22,transparent 60%)}
+.prail{position:absolute;inset:11% 4%;border-radius:50%;background:linear-gradient(135deg,#ffffff3d 0%,transparent 22%,transparent 70%,#0000008c 100%),repeating-linear-gradient(90deg,#00000018 0 1px,transparent 1px 22px),repeating-linear-gradient(88deg,#3d2213 0 3px,#2d180c 3px 7px,#49291a 7px 9px,#34200f 9px 13px);box-shadow:0 30px 60px #000c,inset 0 2px 0 #ffffff66,inset 0 -6px 12px #000a,inset 0 0 0 1px #000}
+.pfelt{border:0;box-shadow:0 0 0 2px #000a,0 0 0 3px #c9ccd233,inset 0 0 70px #000b,inset 0 8px 24px #0009}
+@media(max-width:620px){.prail{inset:9% 0}}
+.machine::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;background:linear-gradient(115deg,transparent 28%,#ffffff3a 40%,transparent 52%) 0 0/250% 100%;animation:msheen 10s ease-in-out infinite}
+@keyframes msheen{0%{background-position:130% 0}55%,100%{background-position:-60% 0}}
+.window::after{content:"";position:absolute;inset:6px;border-radius:6px;pointer-events:none;background:linear-gradient(160deg,#ffffff26 0%,transparent 32%),linear-gradient(0deg,#0000004d,transparent 25%)}
+.marquee{background:linear-gradient(#18181c,#0b0b0e);box-shadow:inset 0 1px 0 #ffffff22,inset 0 -2px 4px #000}
+.wheel-box::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse at 30% 22%,#ffffff38,transparent 42%)}
+.card{background:linear-gradient(150deg,#ffffff,#ece6d6)}
+@media(prefers-reduced-motion:reduce){.rail::after,.prail::after,.machine::before{animation:none!important}}
+/* ---- Mystery Box ---- */
+.mbox-tile{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;position:relative}.mbox-tile>div{flex:1;min-width:220px}.mbox-tile p{margin:.3rem 0 0;color:var(--muted);font-size:.9rem}
+.mbox-ico{width:64px;height:64px}
+.mbox-overlay{position:fixed;inset:0;z-index:60;background:#050506ee;display:grid;place-content:center;justify-items:center;gap:1rem;text-align:center;padding:1rem}
+.mbox-big{width:160px;height:160px}.shake{animation:mshake .5s ease-in-out infinite}
+@keyframes mshake{0%,100%{transform:rotate(0)}20%{transform:rotate(-6deg) scale(1.04)}40%{transform:rotate(6deg) scale(1.06)}60%{transform:rotate(-4deg)}80%{transform:rotate(4deg)}}
+.mbox-result{display:grid;justify-items:center;gap:.6rem;padding:1.6rem 2rem;border-radius:20px;background:var(--panel);border:1px solid var(--rc,#34343a);box-shadow:0 0 0 1px var(--rc,#34343a),0 30px 60px #000;animation:mreveal .5s ease-out}
+@keyframes mreveal{from{transform:scale(.7);opacity:0}}
+@media(prefers-reduced-motion:reduce){.shake,.mbox-result{animation:none}}

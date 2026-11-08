@@ -63,14 +63,14 @@ export default function Roulette({ room, onBet, onDone }) {
   return (
     <main className="table-page">
       <h1>Roulette</h1>
-      <div className="felt roul">
+      <div className="rail"><div className="felt roul">
         <TableDice />
         <div className="wheel-stage"><div className="wheel-box">
           <div className="pointer" />
           <svg viewBox="-112 -112 224 224" className="wheel" style={{ transform: `rotate(${rot}deg)`, transition: 'transform 5s cubic-bezier(.15,.6,.12,1)' }}>
             <defs><radialGradient id="wd" cx="40%" cy="35%" r="80%"><stop offset="0" stopColor="#a8642e"/><stop offset=".6" stopColor="#6b3516"/><stop offset="1" stopColor="#3b1c08"/></radialGradient>
-              <linearGradient id="br" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff3b0"/><stop offset=".5" stopColor="#d9a21f"/><stop offset="1" stopColor="#8a5d0a"/></linearGradient></defs>
-            <circle r="111" fill="url(#wd)"/><circle r="105" fill="none" stroke="#e8c15a" strokeWidth="1.2"/><circle r="98" fill="#241008"/>
+              <linearGradient id="br" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff3b0"/><stop offset=".5" stopColor="#d9a21f"/><stop offset="1" stopColor="#8a5d0a"/></linearGradient><radialGradient id="wgl" cx=".3" cy=".25" r=".8"><stop offset="0" stopColor="#fff" stopOpacity=".3" /><stop offset=".55" stopColor="#fff" stopOpacity="0" /></radialGradient></defs>
+            <circle r="111" fill="url(#wd)"/><circle r="111" fill="url(#wgl)" /><path d="M-92 -52A106 106 0 0 1 -34 -100" stroke="#fff" strokeOpacity=".5" strokeWidth="2.2" fill="none" strokeLinecap="round" /><path d="M96 38A106 106 0 0 1 60 88" stroke="#fff" strokeOpacity=".22" strokeWidth="1.6" fill="none" strokeLinecap="round" /><circle r="105" fill="none" stroke="#e8c15a" strokeWidth="1.2"/><circle r="98" fill="#241008"/>
             {ORDER.map((n, i) => { const [x0, y0] = pt(i * A - A / 2, 96), [x1, y1] = pt(i * A + A / 2, 96), [tx, ty] = pt(i * A, 82)
               return <g key={n}><path d={`M0 0L${x0} ${y0}A96 96 0 0 1 ${x1} ${y1}Z`} className={'seg ' + colorOf(n)} />
                 <text x={tx} y={ty} transform={`rotate(${i * A} ${tx} ${ty})`} className="num" textAnchor="middle" dominantBaseline="middle">{n}</text></g> })}
@@ -86,7 +86,7 @@ export default function Roulette({ room, onBet, onDone }) {
             <button key={n} className={'rn ' + colorOf(n)} onClick={() => place('n' + n)}>{n}<Chip k={'n' + n} /></button>)}</div>
         </div>
         <div className="outside">{OUT.map(o => <button key={o[0]} className="rout" onClick={() => place(o[0])}>{o[1]}<Chip k={o[0]} /></button>)}</div>
-      </div>
+      </div></div>
       <BetBar bet={chip} setBet={setChip} disabled={busy} coins={p.coins} label="Chipwert" />
       <div className="row center">
         {room ? <button className="btn" onClick={placeRoom} disabled={busy || locked || !total || total > p.coins}>{mine ? 'Wetten abgegeben' : `Wetten abgeben, ${total} NC`}</button>

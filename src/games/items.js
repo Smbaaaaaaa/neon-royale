@@ -6,6 +6,7 @@ export const ACCENTS = {"silver": "#c8cbd0", "burgundy": "#8a2433", "midnight-bl
 export const TYPES = { avatar: 'Profilbilder', frame: 'Profilrahmen', bg: 'Hintergründe', accent: 'Akzentfarben', cardback: 'Kartenrücken', felt: 'Tischfilz', chip: 'Chips', namefx: 'Namenseffekte', dice: 'Würfel', anim: 'Animationen' }
 export const ITEMS = [
   { id: 'starter3', type: 'bonus', name: 'Starter-Bonus', desc: 'Einmalig 10.000 Neon Coins gratis', price: 0, bonus: 10000 },
+  { id: 'bonus-15k', type: 'bonus', name: 'Bonus', desc: 'Einmalig 15.000 Neon Coins gratis', price: 0, bonus: 15000 },
   {type: 'avatar', val: 'ace-of-spades', name: 'Ace of Spades', rarity: 'common', default: true, id: 'avatar-ace-of-spades', price: 0},
   {type: 'avatar', val: 'poker-chip', name: 'Poker Chip', rarity: 'common', id: 'avatar-poker-chip', price: 1000, default: false},
   {type: 'avatar', val: 'double-six', name: 'Double Six', rarity: 'common', id: 'avatar-double-six', price: 1000, default: false},

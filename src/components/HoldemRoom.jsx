@@ -51,6 +51,7 @@ export default function HoldemRoom({ room, act, busy }) {
     <div>
       <div className="ptable">
         <TableDice />
+        <div className="prail" />
         <div className="pfelt" />
         <div className="pcenter">
           <div className="pot">Pot: <b>{fmt(pot)} NC</b> · Blinds {fmt(bb / 2)}/{fmt(bb)}{room.phase === 'hand' ? ` · ${{ preflop: 'Preflop', flop: 'Flop', turn: 'Turn', river: 'River' }[room.street]}` : ''}</div>

@@ -38,14 +38,14 @@ export default function Blackjack() {
   return (
     <main className="table-page">
       <h1>Blackjack</h1>
-      <div className="felt">
+      <div className="rail"><div className="felt">
         <TableDice />
         <div className="hand"><small>Dealer {!playing && g.dealer.length ? bjValue(g.dealer) : ''}</small>
           <div className="cards">{g.dealer.map((c, i) => <Card key={i + '' + c.r + c.s} c={c} i={i} hidden={playing && i === 1} />)}</div></div>
         <p className="msg-felt" role="status">{g.msg}</p>
         <div className="hand"><small>{p.name} {g.player.length ? bjValue(g.player) : ''}</small>
           <div className="cards">{g.player.map((c, i) => <Card key={i + '' + c.r + c.s} c={c} i={i} />)}</div></div>
-      </div>
+      </div></div>
       <BetBar bet={bet} setBet={setBet} disabled={!idle || wait} coins={p.coins} />
       <div className="row center">
         {idle && <button className="btn" onClick={deal} disabled={wait || p.coins < bet}>{g.phase === 'done' ? 'Neue Runde' : 'Austeilen'}, {bet} NC</button>}

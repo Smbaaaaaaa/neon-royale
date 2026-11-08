@@ -33,13 +33,13 @@ export default function VideoPoker() {
   return (
     <main className="table-page">
       <h1>Video Poker</h1>
-      <div className="felt">
+      <div className="rail"><div className="felt">
         <TableDice />
         <div className="cards">{s.hand.length ? s.hand.map((c, i) => <Card key={i + '' + c.r + c.s} c={c} i={s.phase === 'hold' ? i : 0} hold={s.held[i] && s.phase === 'hold'} onClick={() => toggle(i)} />)
           : Array.from({ length: 5 }, (_, i) => <Card key={i} hidden />)}</div>
         <p className="msg-felt" role="status">{err || (s.phase === 'bet' ? 'Wähle deinen Einsatz und teile aus.' : s.phase === 'hold' ? 'Tippe auf Karten, die du behalten willst.'
           : s.win ? `${POKER.find(r => r[0] === s.win)[1]}! +${s.pay - s.stake} NC` : 'Kein Gewinn.')}</p>
-      </div>
+      </div></div>
       <BetBar bet={bet} setBet={setBet} disabled={!idle || wait} coins={p.coins} />
       <div className="row center">
         {idle ? <button className="btn" onClick={deal} disabled={wait || p.coins < bet}>Austeilen, {bet} NC</button> : <button className="btn" onClick={draw} disabled={wait}>Ziehen</button>}

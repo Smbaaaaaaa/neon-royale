@@ -24,7 +24,7 @@ export default function PokerRoom({ room, act, busy }) {
   const toggle = i => room.phase === 'draw' && mh && !mh.done && (sfx.chip(), setHeld(h => h.map((x, k) => (k === i ? !x : x))))
   return (
     <div>
-      <div className="felt">
+      <div className="rail"><div className="felt">
         <TableDice />
         <p className="msg-felt" role="status">
           {room.phase === 'lobby' && 'Wartet auf den Start der Runde.'}
@@ -41,7 +41,7 @@ export default function PokerRoom({ room, act, busy }) {
         {room.phase === 'showdown' && room.payouts.map(x => (
           <div key={x.user_id} className="hand"><small>{x.name}: {NAMES[x.cat]} {x.win ? `, gewinnt ${x.pay} NC 🏆` : ''}</small>
             <div className="cards">{x.hand.map((c, i) => <Card key={i + '' + c.r + c.s} c={c} i={i} hold={x.win} />)}</div></div>))}
-      </div>
+      </div></div>
       <div className="row center">
         {room.phase === 'lobby' && host && <>
           <BetBar bet={ante} setBet={setAnte} coins={p.coins} label="Einsatz pro Spieler" />
