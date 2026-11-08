@@ -4,6 +4,7 @@ import { useWallet } from '../context/Wallet.jsx'
 import Roulette from './Roulette.jsx'
 import PokerRoom from './PokerRoom.jsx'
 import HoldemRoom from './HoldemRoom.jsx'
+import NameFx from './NameFx.jsx'
 export default function Multiplayer() {
   const { p, call } = useWallet()
   const [code, setCode] = useState(() => localStorage.getItem('nr-room') || ''), [input, setInput] = useState('')
@@ -57,7 +58,7 @@ export default function Multiplayer() {
         <div className="row"><button className="btn sm ghost" onClick={() => navigator.clipboard?.writeText(room.code)}>Code kopieren</button><button className="btn sm ghost" onClick={leave}>{host ? 'Raum schließen' : 'Verlassen'}</button></div>
       </div>
       <div className="members">{room.members.map(m => <span key={m.user_id} className={'member' + (ready(m.user_id) ? ' ok' : '')}>
-        {m.name}{m.user_id === room.host ? ' (Gastgeber)' : ''}{ready(m.user_id) ? ' ✓' : ''}</span>)}</div>
+        <NameFx name={m.name} fx={m.eq?.namefx} />{m.user_id === room.host ? ' (Gastgeber)' : ''}{ready(m.user_id) ? ' ✓' : ''}</span>)}</div>
       {room.game === 'holdem' ? <HoldemRoom room={room} act={act} busy={wait} /> : poker ? <PokerRoom room={room} act={act} busy={wait} /> : <>
         <Roulette room={room} onBet={b => call('room_bet', { p_code: room.code, p_bets: b })} onDone={setRevealed} />
         <div className="row center">

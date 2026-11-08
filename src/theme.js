@@ -6,4 +6,6 @@ export function applyTheme(eq) {
   r.style.setProperty('--accent', hex)
   r.style.setProperty('--accent-ink', (0.299 * R + 0.587 * G + 0.114 * B) / 255 > 0.5 ? '#0a0a0b' : '#f3efe6')
   r.dataset.bg = eq?.bg || 'matte-black'
+  r.dataset.felt = eq?.felt || 'classic-green'
+  r.dataset.chip = eq?.chip || 'classic-black'
 }

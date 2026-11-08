@@ -4,13 +4,14 @@ import { sfx } from '../audio.js'
 import { SUITS, rankLabel } from '../games/cards.js'
 import Card from './Card.jsx'
 import Avatar from './Avatar.jsx'
+import NameFx from './NameFx.jsx'
 import { useWin, tierOf } from './WinBanner.jsx'
 const HANDS = ['Hohe Karte', 'Ein Paar', 'Zwei Paare', 'Drilling', 'Straße', 'Flush', 'Full House', 'Vierling', 'Straight Flush']
 const BBS = [10, 20, 50, 100, 200, 500, 1000]
 const fmt = n => Number(n).toLocaleString('de-DE')
 // Kleine Karte am Sitzplatz: verdeckt oder offen
-const MC = ({ c, big }) => !c
-  ? <div className={'mc back' + (big ? ' big' : '')} />
+const MC = ({ c, big, cb }) => !c
+  ? <div className={'mc back' + (big ? ' big' : '') + (cb ? ' cb-' + cb : '')} />
   : <div className={'mc' + (c.s === 1 || c.s === 2 ? ' red' : '') + (big ? ' big' : '')}><b>{rankLabel(c.r)}</b><span>{SUITS[c.s]}</span></div>
 // Position auf der Ellipse: Index 0 (du) sitzt unten, die anderen folgen im Uhrzeigersinn
 const pos = (i, n, r = 1) => {
@@ -65,8 +66,8 @@ export default function HoldemRoom({ room, act, busy }) {
               {Number(s.bet) > 0 && <div className="pbet" style={pos(i, order.length, 0.58)}><i />{fmt(s.bet)}</div>}
               <div className={'pseat' + (room.cur === s.user_id && room.phase === 'hand' ? ' turn' : '') + (s.folded && s.in_hand ? ' fold' : '') + (mine ? ' me' : '') + (won ? ' win' : '')}
                 style={pos(i, order.length)}>
-                {cards && <div className="pcards">{cards.map((c, k) => <MC key={k + (faceUp ? 'u' : 'd')} c={faceUp ? c : null} big={mine} />)}</div>}
-                <div className="pname">{s.name}{room.btn === s.seat && <span className="dbtn">D</span>}</div>
+                {cards && <div className="pcards">{cards.map((c, k) => <MC key={k + (faceUp ? 'u' : 'd')} c={faceUp ? c : null} big={mine} cb={s.eq?.cardback} />)}</div>}
+                <div className="pname"><NameFx name={s.name} fx={s.eq?.namefx} />{room.btn === s.seat && <span className="dbtn">D</span>}</div>
                 <Avatar size={30} frame={s.eq?.frame || 'silverline'} avatar={s.eq?.avatar || 'ace-of-spades'} />
                 <div className="pstack">{fmt(s.stack)}{s.allin && s.in_hand ? ' · All-in' : ''}</div>
                 {won && <div className="pwin">+{fmt(pay.won)}</div>}

@@ -6,6 +6,7 @@ import { games } from './games/registry.js'
 import Nav from './components/Nav.jsx'
 import Coin from './components/Coin.jsx'
 import Avatar from './components/Avatar.jsx'
+import NameFx from './components/NameFx.jsx'
 import Slots from './components/Slots.jsx'
 import Roulette from './components/Roulette.jsx'
 import { Shop, Inventory, Profile } from './components/Pages.jsx'
@@ -36,7 +37,7 @@ function Lobby() {
   return (
     <main>
       <section className="hero">
-        <div><div className="row"><Avatar size={64} /><h1>Willkommen, {p.name}</h1></div>
+        <div><div className="row"><Avatar size={64} /><h1>Willkommen, <NameFx name={p.name} fx={p.eq.namefx} /></h1></div>
           <p>Wähle bei jedem Spiel deinen Einsatz von 2 bis 50 NC. Dein Gewinn wächst mit. Den Starter-Bonus findest du im Item-Shop.</p>
           <div className="row">
             <Link to="/spiele/slots" className="btn" style={{ textDecoration: 'none' }}>Slot Machine spielen</Link>
@@ -54,7 +55,7 @@ const Soon = ({ title, phase }) => <main><h1>{title}</h1><p className="muted">Di
 
 export default function App() {
   const { p, ready } = useWallet()
-  useEffect(() => { if (p) applyTheme(p.eq) }, [p?.eq?.bg, p?.eq?.accent])
+  useEffect(() => { if (p) applyTheme(p.eq) }, [p?.eq?.bg, p?.eq?.accent, p?.eq?.felt, p?.eq?.chip])
   if (!ready) return <main className="welcome"><Coin size={90} spin /></main>
   if (!p) return <Welcome />
   return (<>
