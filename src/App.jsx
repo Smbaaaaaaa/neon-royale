@@ -55,7 +55,7 @@ const Soon = ({ title, phase }) => <main><h1>{title}</h1><p className="muted">Di
 
 export default function App() {
   const { p, ready } = useWallet()
-  useEffect(() => { if (p) applyTheme(p.eq) }, [p?.eq?.bg, p?.eq?.accent, p?.eq?.felt, p?.eq?.chip])
+  useEffect(() => { if (p) applyTheme(p.eq) }, [p?.eq?.bg, p?.eq?.accent, p?.eq?.felt, p?.eq?.chip, p?.eq?.dice, p?.eq?.anim])
   if (!ready) return <main className="welcome"><Coin size={90} spin /></main>
   if (!p) return <Welcome />
   return (<>

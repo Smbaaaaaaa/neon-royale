@@ -3,6 +3,7 @@ import { useWallet } from '../context/Wallet.jsx'
 import { sfx } from '../audio.js'
 import BetBar from './BetBar.jsx'
 import Card from './Card.jsx'
+import TableDice from './TableDice.jsx'
 import { useWin, tierOf } from './WinBanner.jsx'
 const NAMES = ['Hohe Karte', 'Ein Paar', 'Zwei Paare', 'Drilling', 'Straße', 'Flush', 'Full House', 'Vierling', 'Straight Flush']
 const NONE = [false, false, false, false, false]
@@ -24,6 +25,7 @@ export default function PokerRoom({ room, act, busy }) {
   return (
     <div>
       <div className="felt">
+        <TableDice />
         <p className="msg-felt" role="status">
           {room.phase === 'lobby' && 'Wartet auf den Start der Runde.'}
           {room.phase === 'draw' && `Pot: ${room.pot} NC (Einsatz ${room.ante} NC pro Spieler)`}

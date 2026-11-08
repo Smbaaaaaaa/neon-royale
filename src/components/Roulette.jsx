@@ -3,6 +3,7 @@ import { useWallet } from '../context/Wallet.jsx'
 import { rnd } from '../games/slotLogic.js'
 import { sfx } from '../audio.js'
 import BetBar from './BetBar.jsx'
+import TableDice from './TableDice.jsx'
 import { useWin, tierOf } from './WinBanner.jsx'
 const ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26]
 const RED = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36])
@@ -63,6 +64,7 @@ export default function Roulette({ room, onBet, onDone }) {
     <main className="table-page">
       <h1>Roulette</h1>
       <div className="felt roul">
+        <TableDice />
         <div className="wheel-stage"><div className="wheel-box">
           <div className="pointer" />
           <svg viewBox="-112 -112 224 224" className="wheel" style={{ transform: `rotate(${rot}deg)`, transition: 'transform 5s cubic-bezier(.15,.6,.12,1)' }}>

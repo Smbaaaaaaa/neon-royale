@@ -8,4 +8,6 @@ export function applyTheme(eq) {
   r.dataset.bg = eq?.bg || 'matte-black'
   r.dataset.felt = eq?.felt || 'classic-green'
   r.dataset.chip = eq?.chip || 'classic-black'
+  r.dataset.dice = eq?.dice || 'classic-black'
+  r.dataset.anim = eq?.anim || 'classic-flip'
 }

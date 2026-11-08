@@ -7,6 +7,7 @@ import Coin from './Coin.jsx'
 import Avatar from './Avatar.jsx'
 import NameFx from './NameFx.jsx'
 import { useWin } from './WinBanner.jsx'
+import { Die } from './TableDice.jsx'
 const fmt = n => Number(n).toLocaleString('de-DE')
 function Preview({ it }) {
   switch (it.type) {
@@ -17,6 +18,8 @@ function Preview({ it }) {
     case 'cardback': return <div className={'cbprev back cb-' + it.val} />
     case 'felt': return <div className="feltprev" data-felt={it.val} />
     case 'chip': return <div className="chipprev" data-chip={it.val}>10</div>
+    case 'dice': return <div className="diceprev" data-dice={it.val}><Die n={5} /></div>
+    case 'anim': return <div className={'animprev ap-' + it.val}><span className="mc big"><b>A</b><span>♠</span></span><span className="mc big red"><b>K</b><span>♥</span></span><span className="pbet pstatic"><i /></span></div>
     default: return <NameFx name="Spielername" fx={it.val} />
   }
 }
@@ -25,30 +28,43 @@ const Badge = ({ r }) => <span className={'rar r-' + r}>{RAR[r]}</span>
 const sorted = l => [...l].sort((a, b) => RARITY.indexOf(a.rarity) - RARITY.indexOf(b.rarity) || a.price - b.price)
 
 export function Shop() {
-  const { p, buy } = useWallet(); const showWin = useWin(); const [tab, setTab] = useState('avatar')
-  const starter = ITEMS[0], got = p.inv.includes('starter3'), list = ITEMS.filter(i => i.type === tab && !i.default)
+  const { p, buy } = useWallet(); const showWin = useWin()
+  const [tab, setTab] = useState('avatar'), [view, setView] = useState('shop')
+  const starter = ITEMS[0], got = p.inv.includes('starter3')
+  const list = ITEMS.filter(i => i.type === tab && !i.default && !i.collection)
+  const toxic = sorted(ITEMS.filter(i => i.collection === 'toxic'))
+  const card = it => {
+    const own = p.inv.includes(it.id)
+    return <article key={it.id} className={'tile item r-' + it.rarity + (it.collection ? ' toxic' : '')}><Preview it={it} /><h2>{it.name}</h2>
+      {it.collection && <span className="muted">{TYPES[it.type]}</span>}<Badge r={it.rarity} />
+      {own ? <span className="tag">Im Inventar</span> : <Price n={it.price} />}
+      <button className="btn sm" disabled={own || p.coins < it.price} onClick={async () => { (await buy(it.id)) && sfx.win('small') }}>{own ? 'Gekauft' : p.coins < it.price ? 'Zu wenig NC' : 'Kaufen'}</button></article>
+  }
   return (
     <main><h1>Item-Shop</h1>
       <section className="tile big starter">
         <Coin size={64} spin /><div><h2>{starter.name}</h2><p>{starter.desc}. Einmal pro Konto.</p></div>
         <button className="btn" disabled={got} onClick={async () => { if (await buy('starter3')) { sfx.win('jackpot'); showWin(starter.bonus, 'jackpot', 'STARTER-BONUS') } }}>{got ? 'Eingelöst' : '10.000 NC abholen'}</button>
       </section>
-      <div className="tabs" role="tablist">{Object.entries(TYPES).map(([k, l]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{l}</button>)}</div>
-      {RARITY.map(r => {
-        const g = sorted(list.filter(i => i.rarity === r)); if (!g.length) return null
-        const owned = g.filter(i => p.inv.includes(i.id)).length
-        return (
-          <details key={tab + r} className={'rgroup r-' + r}>
-            <summary><Badge r={r} /><span>{g.length} Items · {fmt(g[0].price)} NC</span><span className="muted">{owned} von {g.length} im Besitz</span></summary>
-            <div className="grid">{g.map(it => {
-              const own = p.inv.includes(it.id)
-              return <article key={it.id} className={'tile item r-' + it.rarity}><Preview it={it} /><h2>{it.name}</h2>
-                {own ? <span className="tag">Im Inventar</span> : <Price n={it.price} />}
-                <button className="btn sm" disabled={own || p.coins < it.price} onClick={async () => { (await buy(it.id)) && sfx.win('small') }}>{own ? 'Gekauft' : p.coins < it.price ? 'Zu wenig NC' : 'Kaufen'}</button></article>
-            })}</div>
-          </details>)
-      })}
-      <p className="muted">Tippe auf eine Seltenheitsstufe, um die Items zu sehen. Weitere Kategorien folgen: Würfel und Animationen. Neon Coins sind reine Spielwährung ohne Echtgeldwert.</p>
+      <div className="views"><button className={view === 'shop' ? 'on' : ''} onClick={() => setView('shop')}>Kategorien</button>
+        <button className={'tox' + (view === 'toxic' ? ' on' : '')} onClick={() => setView('toxic')}>Toxic Collection</button></div>
+      {view === 'toxic' ? (
+        <section className="toxic-head"><h2>Toxic Collection</h2>
+          <p>Eine eigene Kollektion im Horror-Clown-Stil: vier Profilbilder und für jede Kategorie ein einziges mythisches Design.</p>
+          <div className="grid">{toxic.map(card)}</div></section>
+      ) : <>
+        <div className="tabs" role="tablist">{Object.entries(TYPES).map(([k, l]) => <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? 'on' : ''} onClick={() => setTab(k)}>{l}</button>)}</div>
+        {RARITY.map(r => {
+          const g = sorted(list.filter(i => i.rarity === r)); if (!g.length) return null
+          const owned = g.filter(i => p.inv.includes(i.id)).length
+          return (
+            <details key={tab + r} className={'rgroup r-' + r}>
+              <summary><Badge r={r} /><span>{g.length} Items · {fmt(g[0].price)} NC</span><span className="muted">{owned} von {g.length} im Besitz</span></summary>
+              <div className="grid">{g.map(card)}</div>
+            </details>)
+        })}
+        <p className="muted">Tippe auf eine Seltenheitsstufe, um die Items zu sehen. Neon Coins sind reine Spielwährung ohne Echtgeldwert.</p>
+      </>}
     </main>
   )
 }
@@ -63,7 +79,7 @@ export function Inventory() {
             <summary><b>{label}</b><span className="muted">{mine.length} im Besitz</span></summary>
             <div className="grid">{mine.map(it => {
               const on = p.eq[t] === it.val
-              return <article key={it.id} className={'tile item r-' + it.rarity + (on ? ' on' : '')}><Preview it={it} /><h2>{it.name}</h2><Badge r={it.rarity} />
+              return <article key={it.id} className={'tile item r-' + it.rarity + (on ? ' on' : '')}><Preview it={it} /><h2>{it.name}</h2><Badge r={it.rarity} />{it.collection && <span className="tag">Toxic</span>}
                 <button className="btn sm ghost" disabled={on} onClick={() => equip(t, it.val)}>{on ? 'Ausgerüstet' : 'Ausrüsten'}</button></article>
             })}</div>
           </details>)

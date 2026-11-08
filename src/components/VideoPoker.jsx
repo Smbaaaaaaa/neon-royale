@@ -5,6 +5,7 @@ import { sfx } from '../audio.js'
 import BetBar from './BetBar.jsx'
 import { useWin, tierOf } from './WinBanner.jsx'
 import Card from './Card.jsx'
+import TableDice from './TableDice.jsx'
 export default function VideoPoker() {
   const { p, adjust, refresh, call } = useWallet()
   const showWin = useWin()
@@ -33,6 +34,7 @@ export default function VideoPoker() {
     <main className="table-page">
       <h1>Video Poker</h1>
       <div className="felt">
+        <TableDice />
         <div className="cards">{s.hand.length ? s.hand.map((c, i) => <Card key={i + '' + c.r + c.s} c={c} i={s.phase === 'hold' ? i : 0} hold={s.held[i] && s.phase === 'hold'} onClick={() => toggle(i)} />)
           : Array.from({ length: 5 }, (_, i) => <Card key={i} hidden />)}</div>
         <p className="msg-felt" role="status">{err || (s.phase === 'bet' ? 'Wähle deinen Einsatz und teile aus.' : s.phase === 'hold' ? 'Tippe auf Karten, die du behalten willst.'

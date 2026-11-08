@@ -5,6 +5,7 @@ import { SUITS, rankLabel } from '../games/cards.js'
 import Card from './Card.jsx'
 import Avatar from './Avatar.jsx'
 import NameFx from './NameFx.jsx'
+import TableDice from './TableDice.jsx'
 import { useWin, tierOf } from './WinBanner.jsx'
 const HANDS = ['Hohe Karte', 'Ein Paar', 'Zwei Paare', 'Drilling', 'Straße', 'Flush', 'Full House', 'Vierling', 'Straight Flush']
 const BBS = [10, 20, 50, 100, 200, 500, 1000]
@@ -49,6 +50,7 @@ export default function HoldemRoom({ room, act, busy }) {
   return (
     <div>
       <div className="ptable">
+        <TableDice />
         <div className="pfelt" />
         <div className="pcenter">
           <div className="pot">Pot: <b>{fmt(pot)} NC</b> · Blinds {fmt(bb / 2)}/{fmt(bb)}{room.phase === 'hand' ? ` · ${{ preflop: 'Preflop', flop: 'Flop', turn: 'Turn', river: 'River' }[room.street]}` : ''}</div>
@@ -63,8 +65,8 @@ export default function HoldemRoom({ room, act, busy }) {
           const won = pay && Number(pay.won) > 0
           return (
             <Fragment key={s.user_id}>
-              {Number(s.bet) > 0 && <div className="pbet" style={pos(i, order.length, 0.58)}><i />{fmt(s.bet)}</div>}
-              <div className={'pseat' + (room.cur === s.user_id && room.phase === 'hand' ? ' turn' : '') + (s.folded && s.in_hand ? ' fold' : '') + (mine ? ' me' : '') + (won ? ' win' : '')}
+              {Number(s.bet) > 0 && <div className={'pbet anim-' + (s.eq?.anim || 'classic-flip')} style={pos(i, order.length, 0.58)}><i />{fmt(s.bet)}</div>}
+              <div className={'pseat anim-' + (s.eq?.anim || 'classic-flip') + (room.cur === s.user_id && room.phase === 'hand' ? ' turn' : '') + (s.folded && s.in_hand ? ' fold' : '') + (mine ? ' me' : '') + (won ? ' win' : '')}
                 style={pos(i, order.length)}>
                 {cards && <div className="pcards">{cards.map((c, k) => <MC key={k + (faceUp ? 'u' : 'd')} c={faceUp ? c : null} big={mine} cb={s.eq?.cardback} />)}</div>}
                 <div className="pname"><NameFx name={s.name} fx={s.eq?.namefx} />{room.btn === s.seat && <span className="dbtn">D</span>}</div>

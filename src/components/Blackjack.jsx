@@ -5,6 +5,7 @@ import { sfx } from '../audio.js'
 import BetBar from './BetBar.jsx'
 import { useWin, tierOf } from './WinBanner.jsx'
 import Card from './Card.jsx'
+import TableDice from './TableDice.jsx'
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 export default function Blackjack() {
   const { p, adjust, refresh, call } = useWallet()
@@ -38,6 +39,7 @@ export default function Blackjack() {
     <main className="table-page">
       <h1>Blackjack</h1>
       <div className="felt">
+        <TableDice />
         <div className="hand"><small>Dealer {!playing && g.dealer.length ? bjValue(g.dealer) : ''}</small>
           <div className="cards">{g.dealer.map((c, i) => <Card key={i + '' + c.r + c.s} c={c} i={i} hidden={playing && i === 1} />)}</div></div>
         <p className="msg-felt" role="status">{g.msg}</p>

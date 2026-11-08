@@ -1,3 +1,4 @@
+import { useWallet } from '../context/Wallet.jsx'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 const Ctx = createContext(() => {})
 export const useWin = () => useContext(Ctx)
@@ -23,6 +24,7 @@ function Count({ to }) {
 }
 
 function Banner({ amount, tier, label }) {
+  const { p } = useWallet()
   const sparks = useMemo(() => Array.from({ length: SPARKS[tier] }, () => {
     const a = Math.random() * 6.283, d = 25 + Math.random() * 45
     return { '--x': Math.cos(a) * d + 'vmin', '--y': Math.sin(a) * d * 0.8 + 'vmin', '--sz': 6 + Math.random() * 14 + 'px', '--d': 0.5 + Math.random() * 0.5 + 's' }
@@ -30,6 +32,7 @@ function Banner({ amount, tier, label }) {
   return (
     <div className={'win-fx t-' + tier} aria-live="polite" style={{ '--dur': DUR[tier] + 'ms' }}>
       <div className="win-flash" />
+      {p?.eq?.anim === 'the-house' && <div className="house-fx"><i /><i /><i /></div>}
       {sparks.map((s, i) => <i key={i} className="spark" style={s} />)}
       <div className="win-text">
         <div className="win-label">{label || LABEL[tier]}</div>
