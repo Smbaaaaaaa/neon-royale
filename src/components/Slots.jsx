@@ -105,10 +105,6 @@ export default function Slots() {
 
   return (
     <main className="slots-page">
-      <div className="audio-bar">
-        <button className="btn ghost sm" onClick={() => { setMuted(!audio.muted); setAudio(getAudio()) }}>{audio.muted ? 'Ton aus' : 'Ton an'}</button>
-        <input type="range" min="0" max="1" step="0.05" defaultValue={audio.vol} aria-label="Lautstärke" onChange={e => setVolume(+e.target.value)} />
-      </div>
       <div className="machine-wrap">
         <div className={`machine skin-${p.eq.skin} ${result ? 'win-' + result.tier : ''}`}>
           <div className="marquee"><span>SLOT MACHINE</span><i className="bulbs" /></div>

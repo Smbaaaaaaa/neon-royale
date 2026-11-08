@@ -492,3 +492,35 @@ html[data-chip="clown-chip"],.chipprev[data-chip="clown-chip"]{--chip-bg:repeati
 .mbox-result{display:grid;justify-items:center;gap:.6rem;padding:1.6rem 2rem;border-radius:20px;background:var(--panel);border:1px solid var(--rc,#34343a);box-shadow:0 0 0 1px var(--rc,#34343a),0 30px 60px #000;animation:mreveal .5s ease-out}
 @keyframes mreveal{from{transform:scale(.7);opacity:0}}
 @media(prefers-reduced-motion:reduce){.shake,.mbox-result{animation:none}}
+
+/* ---- Korrekturen: feste Spiegelung statt wandernder Lichtstreifen ---- */
+.rail::after,.prail::after{animation:none!important;background:linear-gradient(180deg,#ffffff24 0%,transparent 20%),linear-gradient(120deg,#ffffff16 0%,transparent 38%)}
+.machine::before{animation:none!important;background:linear-gradient(118deg,#ffffff26 0%,transparent 34%)}
+.felt::after,.pfelt::after{content:"";font:inherit}
+/* ---- Logo mit Krone ---- */
+.logo{font-family:Fraunces,serif;letter-spacing:.16em}.logo .logo-t,.logo .logo-e{color:var(--text);text-shadow:none}
+.logo-e{position:relative;display:inline-block}.crown{position:absolute;width:.68em;right:-.32em;top:-.5em;transform:rotate(28deg);filter:drop-shadow(0 1px 1px #000)}
+.welcome-logo{font-size:2.8rem;letter-spacing:.16em;text-shadow:none}.welcome-logo .logo-t{color:var(--text)}
+.tlogo{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:.13;font:800 clamp(1.2rem,5vw,2.6rem)/1 Fraunces,serif;letter-spacing:.3em;color:#fff}
+.ptable .tlogo{inset:auto;left:50%;top:27%;transform:translate(-50%,-50%);display:block}
+/* ---- Lautstärke in der Navigation ---- */
+.snd{position:relative}.snd-btn{background:var(--panel);border:1px solid var(--line);color:var(--text);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer}
+.snd-btn:hover{border-color:var(--accent)}
+.snd-pop{position:absolute;right:0;top:46px;z-index:20;width:240px;background:#141416;border:1px solid #34343a;border-radius:14px;padding:.9rem;box-shadow:0 18px 40px #000c;display:grid;gap:.7rem}
+.snd-row{display:flex;gap:.6rem;align-items:center;color:var(--text)}.snd-row input[type=range]{flex:1;min-width:0;width:100%;accent-color:var(--accent)}.snd-row b{min-width:3.2rem;text-align:right;font-weight:600}
+/* ---- Mystery Box: Aufladen, Aufbruch, Enthüllung ---- */
+.mbox-overlay{overflow:hidden;gap:1.2rem}
+.shake1{animation:mshake .5s ease-in-out infinite}.shake2{animation:mshake .24s ease-in-out infinite}.shake3{animation:mshake .12s ease-in-out infinite}
+.mbox-big{width:min(220px,50vw);height:min(220px,50vw);transition:filter .25s}
+.mbox-big .lid{transform-box:fill-box;transform-origin:0 100%}.mbox-big.opened .lid{animation:mlid .6s ease-out forwards}
+@keyframes mlid{to{transform:translateY(-38px) rotate(-24deg);opacity:0}}
+.mrays{position:absolute;left:50%;top:50%;width:150vmax;height:150vmax;margin:-75vmax;background:repeating-conic-gradient(from 0deg,var(--rc) 0 5deg,transparent 5deg 15deg);-webkit-mask-image:radial-gradient(circle,#000 0,transparent 55%);mask-image:radial-gradient(circle,#000 0,transparent 55%);opacity:.38;animation:mrot 16s linear infinite;pointer-events:none}
+@keyframes mrot{to{transform:rotate(360deg)}}
+.mflash{position:absolute;inset:0;background:#fff;opacity:0;animation:mflash .7s ease-out;pointer-events:none}@keyframes mflash{0%{opacity:.95}100%{opacity:0}}
+.msp{position:absolute;left:50%;top:50%;width:var(--sz);height:var(--sz);border-radius:50%;background:radial-gradient(#fff,var(--rc) 60%,transparent 70%);box-shadow:0 0 12px var(--rc);opacity:0;animation:burst 1.5s ease-out var(--d) both;pointer-events:none}
+.mquake{animation:quake .6s ease-out}
+.mbox-result{position:relative;z-index:2;animation:mflipin .85s cubic-bezier(.2,.9,.2,1.1)}
+@keyframes mflipin{0%{transform:translateY(160px) rotateY(180deg) scale(.4);opacity:0}60%{opacity:1}}
+.mbox-rar{font:800 clamp(1.8rem,7vw,3.2rem)/1 Fraunces,serif;letter-spacing:.08em;color:var(--rc);text-shadow:0 0 22px var(--rc)}
+.toxic-box{border-color:#4a0d18;background:linear-gradient(135deg,#1a070c,#0c0507)}.toxic-box h2{color:#e9e0cc}
+@media(prefers-reduced-motion:reduce){.shake1,.shake2,.shake3,.mrays,.mflash,.msp,.mquake,.mbox-result,.mbox-big.opened .lid{animation:none!important}}

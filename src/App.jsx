@@ -6,6 +6,7 @@ import { games } from './games/registry.js'
 import Nav from './components/Nav.jsx'
 import Coin from './components/Coin.jsx'
 import Avatar from './components/Avatar.jsx'
+import Logo from './components/Logo.jsx'
 import NameFx from './components/NameFx.jsx'
 import Slots from './components/Slots.jsx'
 import Roulette from './components/Roulette.jsx'
@@ -20,7 +21,7 @@ function Welcome() {
   const { createGuest, error } = useWallet(); const [n, setN] = useState(''), [busy, setBusy] = useState(false)
   return (
     <main className="welcome">
-      <Coin size={120} spin /><h1>NEON ROYALE</h1>
+      <Coin size={120} spin /><h1 className="welcome-logo"><Logo /></h1>
       <p>Wähle einen Spielernamen und starte mit 50 Neon Coins. Im Item-Shop wartet ein Starter-Bonus von 10.000 NC. Neon Coins sind reine Spielwährung ohne Echtgeldwert.</p>
       <form onSubmit={e => { e.preventDefault(); if (n.trim().length >= 2) { setBusy(true); createGuest(n).finally(() => setBusy(false)) } }}>
         <input value={n} onChange={e => setN(e.target.value)} maxLength={16} placeholder="Spielername" aria-label="Spielername" />

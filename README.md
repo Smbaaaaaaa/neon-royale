@@ -1,4 +1,4 @@
-# NEON ROYALE
+# ROYALE
 npm install && npm run dev  |  Deploy: Netlify (netlify.toml liegt bei)
 Neue Spiele: Eintrag in src/games/registry.js + Route in src/App.jsx.
 
