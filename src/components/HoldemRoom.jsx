@@ -54,7 +54,7 @@ export default function HoldemRoom({ room, act, busy }) {
         <div className="prail" />
         <div className="pfelt" />
         <div className="pcenter">
-          <div className="pot">Pot: <b>{fmt(pot)} NC</b> · Blinds {fmt(bb / 2)}/{fmt(bb)}{room.phase === 'hand' ? ` · ${{ preflop: 'Preflop', flop: 'Flop', turn: 'Turn', river: 'River' }[room.street]}` : ''}</div>
+          <div className="pot">Pot: <b>{fmt(pot)} RC</b> · Blinds {fmt(bb / 2)}/{fmt(bb)}{room.phase === 'hand' ? ` · ${{ preflop: 'Preflop', flop: 'Flop', turn: 'Turn', river: 'River' }[room.street]}` : ''}</div>
           <div className="cards board">{Array.from({ length: 5 }, (_, i) => board[i]
             ? <Card key={i + '' + board[i].r + board[i].s} c={board[i]} i={i} /> : <Card key={'e' + i} hidden />)}</div>
           {!seats.length && <p className="msg-felt">Noch niemand sitzt am Tisch.</p>}
@@ -98,12 +98,12 @@ export default function HoldemRoom({ room, act, busy }) {
       {host && room.phase === 'hand' && room.cur && room.cur !== p.id && <div className="row center"><button className="btn sm ghost" disabled={busy} onClick={() => go('holdem_skip')}>Spieler überspringen</button></div>}
 
       {(room.phase === 'lobby' || room.phase === 'showdown') && <div className="tile seatpanel">
-        <h2>{me ? `Dein Stack: ${fmt(me.stack)} NC` : 'Setz dich an den Tisch'}</h2>
-        <p className="muted">Buy-in von {fmt(minBuy)} bis {fmt(maxBuy)} NC (20 bis 200 Big Blinds). Was du nicht verspielst, bekommst du beim Aufstehen zurück.</p>
+        <h2>{me ? `Dein Stack: ${fmt(me.stack)} RC` : 'Setz dich an den Tisch'}</h2>
+        <p className="muted">Buy-in von {fmt(minBuy)} bis {fmt(maxBuy)} RC (20 bis 200 Big Blinds). Was du nicht verspielst, bekommst du beim Aufstehen zurück.</p>
         <div className="row center"><input type="range" min={minBuy} max={maxBuy} step={bb} value={buy} onChange={e => setBuy(+e.target.value)} aria-label="Buy-in" />
-          <b>{fmt(buy)} NC</b></div>
+          <b>{fmt(buy)} RC</b></div>
         <div className="row center">
-          <button className="btn" disabled={busy || buy > p.coins} onClick={() => go('holdem_sit', { p_buyin: buy })}>{me ? 'Chips nachkaufen' : 'Hinsetzen'}{buy > p.coins ? ' (zu wenig NC)' : ''}</button>
+          <button className="btn" disabled={busy || buy > p.coins} onClick={() => go('holdem_sit', { p_buyin: buy })}>{me ? 'Chips nachkaufen' : 'Hinsetzen'}{buy > p.coins ? ' (zu wenig RC)' : ''}</button>
           {me && <button className="btn ghost" disabled={busy} onClick={() => go('holdem_standup')}>Aufstehen und auszahlen</button>}</div>
         {host && <div className="row center">
           {room.phase === 'lobby' && !seats.length && <label className="muted">Big Blind: <select value={bb} onChange={e => go('holdem_blinds', { p_bb: +e.target.value })}>{BBS.map(b => <option key={b} value={b}>{b}</option>)}</select></label>}

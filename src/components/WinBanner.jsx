@@ -36,7 +36,7 @@ function Banner({ amount, tier, label }) {
       {sparks.map((s, i) => <i key={i} className="spark" style={s} />)}
       <div className="win-text">
         <div className="win-label">{label || LABEL[tier]}</div>
-        <div className="win-amt">+<Count to={amount} /> <small>NC</small></div>
+        <div className="win-amt">+<Count to={amount} /> <small>RC</small></div>
       </div>
     </div>
   )

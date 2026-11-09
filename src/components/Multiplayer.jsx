@@ -67,7 +67,7 @@ export default function Multiplayer() {
         </div>
         <p className="muted center-t">{room.phase === 'betting' ? (host ? 'Warte, bis alle gesetzt haben (✓), dann starte die Kugel.' : 'Setze deine Chips und gib deine Wetten ab. Der Gastgeber startet die Kugel.') : shown ? '' : 'Die Kugel rollt …'}</p>
         {shown && <table className="stats"><thead><tr><th>Spieler</th><th>Einsatz</th><th>Auszahlung</th></tr></thead><tbody>
-          {room.payouts.map(x => <tr key={x.user_id} className={Number(x.pay) > Number(x.stake) ? 'me' : ''}><td>{x.name}</td><td>{x.stake} NC</td><td>{x.pay} NC</td></tr>)}</tbody></table>}
+          {room.payouts.map(x => <tr key={x.user_id} className={Number(x.pay) > Number(x.stake) ? 'me' : ''}><td>{x.name}</td><td>{x.stake} RC</td><td>{x.pay} RC</td></tr>)}</tbody></table>}
       </>}
       {err && <p className="muted center-t">{err}</p>}
     </main>

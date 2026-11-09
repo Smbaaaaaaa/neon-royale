@@ -1,5 +1,5 @@
 // Synthetische Sounds über die Web Audio API, ohne Audiodateien.
-let ctx, master
+let ctx, master, lastScratch = 0
 let vol = parseFloat(localStorage.getItem('nr-vol') ?? '0.5')
 let muted = localStorage.getItem('nr-mute') === '1'
 const ac = () => {
@@ -27,6 +27,7 @@ function noise(d, g = 0.3, freq = 1000, at = 0) {
 }
 export const sfx = {
   unlock: () => ac(),
+  scratch() { const n = performance.now(); if (n - lastScratch < 55) return; lastScratch = n; noise(0.06, 0.12, 7000) },
   charge(ms) {
     const c = ac(), t = c.currentTime, d = ms / 1000, o = c.createOscillator(), g = c.createGain()
     o.type = 'sawtooth'; o.frequency.setValueAtTime(90, t); o.frequency.exponentialRampToValueAtTime(700, t + d)

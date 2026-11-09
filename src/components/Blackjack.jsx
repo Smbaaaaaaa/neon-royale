@@ -21,7 +21,7 @@ export default function Blackjack() {
     const pay = Number(r.pay), b0 = Number(r.bet)
     if (pay > b0) sfx.win(r.bj ? 'big' : 'small'); else if (pay) sfx.chip(); else sfx.lose()
     if (pay > b0) showWin(pay - b0, tierOf(pay - b0, b0))
-    setG({ phase: 'done', player: r.player, dealer: d, msg: r.msg + (pay > b0 ? ` +${pay - b0} NC` : '') })
+    setG({ phase: 'done', player: r.player, dealer: d, msg: r.msg + (pay > b0 ? ` +${pay - b0} RC` : '') })
     refresh(); setWait(false)
   }
   const show = r => { sfx.card(); setG({ phase: 'play', player: r.player, dealer: r.dealer, msg: 'Karte, bleiben oder verdoppeln?' }); setWait(false) }
@@ -48,7 +48,7 @@ export default function Blackjack() {
       </div></div>
       <BetBar bet={bet} setBet={setBet} disabled={!idle || wait} coins={p.coins} />
       <div className="row center">
-        {idle && <button className="btn" onClick={deal} disabled={wait || p.coins < bet}>{g.phase === 'done' ? 'Neue Runde' : 'Austeilen'}, {bet} NC</button>}
+        {idle && <button className="btn" onClick={deal} disabled={wait || p.coins < bet}>{g.phase === 'done' ? 'Neue Runde' : 'Austeilen'}, {bet} RC</button>}
         {playing && <><button className="btn" onClick={hit} disabled={wait}>Karte</button><button className="btn ghost" onClick={stand} disabled={wait}>Bleiben</button>
           <button className="btn ghost" onClick={dbl} disabled={wait || p.coins < stake || g.player.length !== 2}>Verdoppeln</button></>}
       </div>

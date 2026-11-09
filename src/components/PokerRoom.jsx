@@ -28,8 +28,8 @@ export default function PokerRoom({ room, act, busy }) {
         <TableDice />
         <p className="msg-felt" role="status">
           {room.phase === 'lobby' && 'Wartet auf den Start der Runde.'}
-          {room.phase === 'draw' && `Pot: ${room.pot} NC (Einsatz ${room.ante} NC pro Spieler)`}
-          {room.phase === 'showdown' && `Showdown. Pot: ${room.pot} NC`}
+          {room.phase === 'draw' && `Pot: ${room.pot} RC (Einsatz ${room.ante} RC pro Spieler)`}
+          {room.phase === 'showdown' && `Showdown. Pot: ${room.pot} RC`}
         </p>
         {room.phase === 'draw' && <>
           <div className="members">{room.seats.map(s => <span key={s.user_id} className={'member' + (s.done ? ' ok' : '')}>{s.name}{s.done ? ' hat getauscht ✓' : ' denkt nach …'}</span>)}</div>
@@ -39,13 +39,13 @@ export default function PokerRoom({ room, act, busy }) {
           </> : <p className="msg-felt">Du bist in dieser Runde nicht dabei. Beim nächsten Start kannst du mitspielen.</p>}
         </>}
         {room.phase === 'showdown' && room.payouts.map(x => (
-          <div key={x.user_id} className="hand"><small>{x.name}: {NAMES[x.cat]} {x.win ? `, gewinnt ${x.pay} NC 🏆` : ''}</small>
+          <div key={x.user_id} className="hand"><small>{x.name}: {NAMES[x.cat]} {x.win ? `, gewinnt ${x.pay} RC 🏆` : ''}</small>
             <div className="cards">{x.hand.map((c, i) => <Card key={i + '' + c.r + c.s} c={c} i={i} hold={x.win} />)}</div></div>))}
       </div></div>
       <div className="row center">
         {room.phase === 'lobby' && host && <>
           <BetBar bet={ante} setBet={setAnte} coins={p.coins} label="Einsatz pro Spieler" />
-          <button className="btn" disabled={busy || room.members.length < 2} onClick={() => act('poker_start', { p_ante: ante })}>Runde starten, {ante} NC</button></>}
+          <button className="btn" disabled={busy || room.members.length < 2} onClick={() => act('poker_start', { p_ante: ante })}>Runde starten, {ante} RC</button></>}
         {room.phase === 'draw' && mh && !mh.done && <button className="btn" disabled={busy} onClick={() => act('poker_exchange', { p_held: held })}>Karten tauschen</button>}
         {room.phase === 'draw' && host && <button className="btn ghost" disabled={busy} onClick={() => act('poker_force')}>Runde erzwingen</button>}
         {room.phase === 'showdown' && host && <button className="btn" disabled={busy} onClick={() => act('poker_next')}>Nächste Runde</button>}

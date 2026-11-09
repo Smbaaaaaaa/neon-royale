@@ -5,8 +5,8 @@ export const useWallet = () => useContext(Ctx)
 const DAILY = 1000, RESCUE = 10
 const today = () => new Date().toISOString().slice(0, 10)
 const shape = s => s?.profile ? {
-  id: s.profile.id, name: s.profile.name, coins: Number(s.profile.coins), lastDaily: s.profile.last_daily, lastRescue: s.profile.last_rescue,
-  eq: s.profile.eq, inv: s.inventory || [],
+  id: s.profile.id, name: s.profile.name, coins: Number(s.profile.coins), lastDaily: s.profile.last_daily, lastRescue: s.profile.last_rescue, lastBox: s.profile.last_box,
+  eq: s.profile.eq, inv: s.inventory || [], claims: s.claims || {},
   stats: Object.fromEntries((s.stats || []).map(x => [x.game, { rounds: x.rounds, wins: x.wins, best: Number(x.best) }])),
 } : null
 
@@ -47,11 +47,12 @@ export function WalletProvider({ children }) {
   }
   const adjust = n => setP(s => s && { ...s, coins: s.coins + n })
   const buy = async id => !(await act('buy_item', { p_id: id })).error
+  const claimBonus = async id => !(await act('claim_bonus', { p_id: id })).error
   const equip = (type, val) => act('equip_item', { p_type: type, p_val: val })
   const rename = async n => { const r = await act('rename_profile', { p_name: n }); return r.error ? 0 : Number(r.data) }
   const claimDaily = () => act('claim_daily')
   const claimRescue = () => act('claim_rescue')
-  return <Ctx.Provider value={{ p, ready, error, createGuest, refresh, adjust, buy, equip, rename, claimDaily, claimRescue, DAILY, RESCUE,
+  return <Ctx.Provider value={{ p, ready, error, createGuest, refresh, adjust, buy, claimBonus, equip, rename, claimDaily, claimRescue, DAILY, RESCUE,
     call: play, playSlots: bet => play('play_slots', { p_bet: bet }), playRoulette: bets => play('play_roulette', { p_bets: bets }),
-    dailyReady: !!p && p.lastDaily !== today(), rescueReady: !!p && p.coins < 2 && p.lastRescue !== today() }}>{children}</Ctx.Provider>
+    dailyReady: !!p && p.lastDaily !== today(), dailyBoxReady: !!p && p.lastBox !== today(), rescueReady: !!p && p.coins < 2 && p.lastRescue !== today() }}>{children}</Ctx.Provider>
 }

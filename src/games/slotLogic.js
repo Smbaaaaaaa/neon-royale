@@ -1,7 +1,7 @@
 // Faire Slot-Logik: Ergebnisse kommen aus crypto.getRandomValues, die Gewichte unten sind öffentlich.
 export const SYMBOLS = ['cherry', 'lemon', 'bell', 'bar', 'seven', 'diamond']
 export const WEIGHTS = { cherry: 30, lemon: 26, bell: 18, bar: 12, seven: 8, diamond: 5 }
-// Auszahlung in NC pro Linie bei 3 / 4 / 5 gleichen Symbolen von links
+// Auszahlung in RC pro Linie bei 3 / 4 / 5 gleichen Symbolen von links
 export const PAYS = {
   cherry: [2, 4, 10], lemon: [2, 5, 14], bell: [3, 9, 24],
   bar: [5, 16, 46], seven: [12, 38, 130], diamond: [20, 64, 240],

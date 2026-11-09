@@ -5,8 +5,9 @@ export const DEFAULT_EQ = {"avatar": "ace-of-spades", "frame": "silverline", "ca
 export const ACCENTS = {"silver": "#c8cbd0", "burgundy": "#8a2433", "midnight-blue": "#35609e", "emerald": "#2e9e78", "champagne": "#d8c39a", "amethyst": "#9a78c9", "deep-teal": "#2a8a90", "copper": "#c27a45", "crimson": "#b32636", "platinum": "#e4e6ea", "royal-gold": "#c9a24a", "frost": "#a8d4ea", "liquid-chrome": "#d4d8de", "void-red": "#a3121c", "eternal": "#f3f1ea", "greasepaint": "#b3121f"}
 export const TYPES = { avatar: 'Profilbilder', frame: 'Profilrahmen', bg: 'Hintergründe', accent: 'Akzentfarben', cardback: 'Kartenrücken', felt: 'Tischfilz', chip: 'Chips', namefx: 'Namenseffekte', dice: 'Würfel', anim: 'Animationen' }
 export const ITEMS = [
-  { id: 'starter3', type: 'bonus', name: 'Starter-Bonus', desc: 'Einmalig 10.000 Neon Coins gratis', price: 0, bonus: 10000 },
-  { id: 'bonus-15k', type: 'bonus', name: 'Bonus', desc: 'Einmalig 15.000 Neon Coins gratis', price: 0, bonus: 15000 },
+  { id: 'starter3', type: 'bonus', name: 'Starter-Bonus', desc: 'Einmal pro Tag: 10.000 Royal Coins gratis', price: 0, bonus: 10000 },
+  { id: 'bonus-15k', type: 'bonus', name: 'Bonus', desc: 'Einmal pro Tag: 15.000 Royal Coins gratis', price: 0, bonus: 15000 },
+  { id: 'bonus-25k', type: 'bonus', name: 'Willkommensbonus', desc: 'Einmal pro Tag: 25.000 Royal Coins gratis', price: 0, bonus: 25000 },
   {type: 'avatar', val: 'ace-of-spades', name: 'Ace of Spades', rarity: 'common', default: true, id: 'avatar-ace-of-spades', price: 0},
   {type: 'avatar', val: 'poker-chip', name: 'Poker Chip', rarity: 'common', id: 'avatar-poker-chip', price: 1000, default: false},
   {type: 'avatar', val: 'double-six', name: 'Double Six', rarity: 'common', id: 'avatar-double-six', price: 1000, default: false},

@@ -38,14 +38,14 @@ export default function VideoPoker() {
         <div className="cards">{s.hand.length ? s.hand.map((c, i) => <Card key={i + '' + c.r + c.s} c={c} i={s.phase === 'hold' ? i : 0} hold={s.held[i] && s.phase === 'hold'} onClick={() => toggle(i)} />)
           : Array.from({ length: 5 }, (_, i) => <Card key={i} hidden />)}</div>
         <p className="msg-felt" role="status">{err || (s.phase === 'bet' ? 'Wähle deinen Einsatz und teile aus.' : s.phase === 'hold' ? 'Tippe auf Karten, die du behalten willst.'
-          : s.win ? `${POKER.find(r => r[0] === s.win)[1]}! +${s.pay - s.stake} NC` : 'Kein Gewinn.')}</p>
+          : s.win ? `${POKER.find(r => r[0] === s.win)[1]}! +${s.pay - s.stake} RC` : 'Kein Gewinn.')}</p>
       </div></div>
       <BetBar bet={bet} setBet={setBet} disabled={!idle || wait} coins={p.coins} />
       <div className="row center">
-        {idle ? <button className="btn" onClick={deal} disabled={wait || p.coins < bet}>Austeilen, {bet} NC</button> : <button className="btn" onClick={draw} disabled={wait}>Ziehen</button>}
+        {idle ? <button className="btn" onClick={deal} disabled={wait || p.coins < bet}>Austeilen, {bet} RC</button> : <button className="btn" onClick={draw} disabled={wait}>Ziehen</button>}
       </div>
-      <details className="paytable" open><summary>Gewinntabelle bei {bet} NC Einsatz</summary>
-        <table><tbody>{POKER.map(([k, n, m]) => <tr key={k} className={s.win === k ? 'cur' : ''}><td>{n}</td><td>{m * bet} NC</td></tr>)}</tbody></table></details>
+      <details className="paytable" open><summary>Gewinntabelle bei {bet} RC Einsatz</summary>
+        <table><tbody>{POKER.map(([k, n, m]) => <tr key={k} className={s.win === k ? 'cur' : ''}><td>{n}</td><td>{m * bet} RC</td></tr>)}</tbody></table></details>
     </main>
   )
 }

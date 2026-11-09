@@ -79,7 +79,7 @@ export default function Roulette({ room, onBet, onDone }) {
           <div className="ball-orbit" style={{ transform: `rotate(${ball}deg)`, transition: 'transform 5s cubic-bezier(.2,.5,.1,1)' }}><i /></div>
         </div></div>
         <div className="hist">{hist.map((n, i) => <span key={i} className={'rn sm ' + colorOf(n)}>{n}</span>)}</div>
-        <p className="msg-felt" role="status">{res?.err ? res.err : res ? `Zahl ${res.n}, ${{ red: 'Rot', black: 'Schwarz', green: 'Grün' }[colorOf(res.n)]}. ${res.pay > res.stake ? `Gewinn +${res.pay - res.stake} NC` : res.pay ? 'Einsatz teilweise zurück' : 'Kein Gewinn'}` : busy ? 'Kugel rollt …' : 'Setze Chips auf das Feld und drehe.'}</p>
+        <p className="msg-felt" role="status">{res?.err ? res.err : res ? `Zahl ${res.n}, ${{ red: 'Rot', black: 'Schwarz', green: 'Grün' }[colorOf(res.n)]}. ${res.pay > res.stake ? `Gewinn +${res.pay - res.stake} RC` : res.pay ? 'Einsatz teilweise zurück' : 'Kein Gewinn'}` : busy ? 'Kugel rollt …' : 'Setze Chips auf das Feld und drehe.'}</p>
         <div className="rboard">
           <button className="rn green zero" onClick={() => place('n0')}>0<Chip k="n0" /></button>
           <div className="rnums">{[3, 2, 1].flatMap(o => Array.from({ length: 12 }, (_, c) => c * 3 + o)).map(n =>
@@ -89,8 +89,8 @@ export default function Roulette({ room, onBet, onDone }) {
       </div></div>
       <BetBar bet={chip} setBet={setChip} disabled={busy} coins={p.coins} label="Chipwert" />
       <div className="row center">
-        {room ? <button className="btn" onClick={placeRoom} disabled={busy || locked || !total || total > p.coins}>{mine ? 'Wetten abgegeben' : `Wetten abgeben, ${total} NC`}</button>
-          : <button className="btn" onClick={spin} disabled={busy || !total || total > p.coins}>Drehen, {total} NC</button>}
+        {room ? <button className="btn" onClick={placeRoom} disabled={busy || locked || !total || total > p.coins}>{mine ? 'Wetten abgegeben' : `Wetten abgeben, ${total} RC`}</button>
+          : <button className="btn" onClick={spin} disabled={busy || !total || total > p.coins}>Drehen, {total} RC</button>}
         <button className="btn ghost" onClick={() => setBets({})} disabled={busy || !total}>Löschen</button>
         <button className="btn ghost" onClick={() => setBets(last)} disabled={busy || !Object.keys(last).length}>Letzte Wetten</button>
       </div>

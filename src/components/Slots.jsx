@@ -119,11 +119,11 @@ export default function Slots() {
           <div className="panel">
             <div className="lcd"><small>Guthaben</small><b>{p.coins}</b></div>
             <button className="spin-btn" onClick={() => { setPull(1); setTimeout(() => setPull(0), 180); doSpin() }} disabled={!canSpin}>
-              {busy ? 'Walzen laufen' : `Drehen, ${bet} NC`}</button>
+              {busy ? 'Walzen laufen' : `Drehen, ${bet} RC`}</button>
             <div className="lcd win"><small>Gewinn</small><b>{result ? result.total : 0}</b></div>
           </div>
           <div className="msg" role="status">
-            {p.coins < BETS[0] && !busy ? (rescueReady ? <button className="btn sm" onClick={claimRescue}>Nachschub: {RESCUE} NC holen</button> : 'Zu wenig Coins. Hol dir morgen den Tagesbonus in der Lobby.')
+            {p.coins < BETS[0] && !busy ? (rescueReady ? <button className="btn sm" onClick={claimRescue}>Nachschub: {RESCUE} RC holen</button> : 'Zu wenig Coins. Hol dir morgen den Tagesbonus in der Lobby.')
               : result?.err ? result.err : result ? (result.tier === 'jackpot' ? 'JACKPOT!' : result.tier === 'big' ? 'Großer Gewinn!' : result.total ? 'Gewinn!' : 'Kein Gewinn, nochmal ziehen') : 'Zieh den Hebel oder tippe auf Drehen'}
           </div>
           <Tray burst={burst} />
@@ -135,11 +135,11 @@ export default function Slots() {
             style={{ transform: `translateY(${pull * TRAVEL}px)`, transition: drag ? 'none' : 'transform .5s cubic-bezier(.3,1.7,.5,1)' }} />
         </div>
       </div>
-      <details className="paytable"><summary>Gewinntabelle für {bet} NC Einsatz (9 Linien, Auszahlung pro Linie in NC)</summary>
+      <details className="paytable"><summary>Gewinntabelle für {bet} RC Einsatz (9 Linien, Auszahlung pro Linie in RC)</summary>
         <table><thead><tr><th>Symbol</th><th>3×</th><th>4×</th><th>5×</th></tr></thead><tbody>
           {Object.entries(PAYS).map(([s, v]) => <tr key={s}><td><Sym s={s} /></td>{v.map((x, i) => <td key={i}>{Math.round(x * bet / 2)}</td>)}</tr>)}
         </tbody></table>
-        <p className="muted">Gleiche Symbole müssen auf einer Linie von links nach rechts liegen. Alle Ergebnisse sind zufällig und fair. Neon Coins haben keinen Echtgeldwert.</p>
+        <p className="muted">Gleiche Symbole müssen auf einer Linie von links nach rechts liegen. Alle Ergebnisse sind zufällig und fair. Royal Coins haben keinen Echtgeldwert.</p>
       </details>
     </main>
   )

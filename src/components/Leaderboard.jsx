@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useWallet } from '../context/Wallet.jsx'
-const TABS = [['all', 'Gesamt'], ['slots', 'Slot Machine'], ['roulette', 'Roulette'], ['blackjack', 'Blackjack'], ['poker', 'Video Poker'], ['holdem', "Texas Hold'em"]]
+const TABS = [['all', 'Gesamt'], ['slots', 'Slot Machine'], ['roulette', 'Roulette'], ['blackjack', 'Blackjack'], ['poker', 'Video Poker'], ['holdem', "Texas Hold'em"], ['scratch', 'Rubbellose']]
 export default function Leaderboard() {
   const { p, call } = useWallet(); const [tab, setTab] = useState('all'), [rows, setRows] = useState(null), [err, setErr] = useState('')
   useEffect(() => { setRows(null); call('get_leaderboard', { p_game: tab }).then(r => r?.error ? setErr(r.error) : (setErr(''), setRows(r))) }, [tab, call])

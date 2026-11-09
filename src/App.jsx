@@ -16,13 +16,14 @@ import Blackjack from './components/Blackjack.jsx'
 import VideoPoker from './components/VideoPoker.jsx'
 import Multiplayer from './components/Multiplayer.jsx'
 import Leaderboard from './components/Leaderboard.jsx'
+import Scratch from './components/Scratch.jsx'
 
 function Welcome() {
   const { createGuest, error } = useWallet(); const [n, setN] = useState(''), [busy, setBusy] = useState(false)
   return (
     <main className="welcome">
       <Coin size={120} spin /><h1 className="welcome-logo"><Logo /></h1>
-      <p>Wähle einen Spielernamen und starte mit 50 Neon Coins. Im Item-Shop wartet ein Starter-Bonus von 10.000 NC. Neon Coins sind reine Spielwährung ohne Echtgeldwert.</p>
+      <p>Wähle einen Spielernamen und starte mit 50 Royal Coins. Im Item-Shop wartet ein Starter-Bonus von 10.000 RC. Royal Coins sind reine Spielwährung ohne Echtgeldwert.</p>
       <form onSubmit={e => { e.preventDefault(); if (n.trim().length >= 2) { setBusy(true); createGuest(n).finally(() => setBusy(false)) } }}>
         <input value={n} onChange={e => setN(e.target.value)} maxLength={16} placeholder="Spielername" aria-label="Spielername" />
         <button className="btn" disabled={busy || n.trim().length < 2}>{busy ? 'Verbinde …' : 'Als Gast starten'}</button>{error && <p className="muted" style={{ flexBasis: '100%' }}>{error}</p>}
@@ -39,11 +40,11 @@ function Lobby() {
     <main>
       <section className="hero">
         <div><div className="row"><Avatar size={64} /><h1>Willkommen, <NameFx name={p.name} fx={p.eq.namefx} /></h1></div>
-          <p>Wähle bei jedem Spiel deinen Einsatz von 2 bis 50 NC. Dein Gewinn wächst mit. Den Starter-Bonus findest du im Item-Shop.</p>
+          <p>Wähle bei jedem Spiel deinen Einsatz von 2 bis 1.000 RC. Dein Gewinn wächst mit. Den Starter-Bonus findest du im Item-Shop.</p>
           <div className="row">
             <Link to="/spiele/slots" className="btn" style={{ textDecoration: 'none' }}>Slot Machine spielen</Link>
-            <button className="btn ghost" onClick={claimDaily} disabled={!dailyReady}>{dailyReady ? `Tagesbonus: ${DAILY} NC holen` : 'Tagesbonus abgeholt'}</button>
-            {rescueReady && <button className="btn ghost" onClick={claimRescue}>Nachschub: {RESCUE} NC</button>}
+            <button className="btn ghost" onClick={claimDaily} disabled={!dailyReady}>{dailyReady ? `Tagesbonus: ${DAILY} RC holen` : 'Tagesbonus abgeholt'}</button>
+            {rescueReady && <button className="btn ghost" onClick={claimRescue}>Nachschub: {RESCUE} RC</button>}
           </div></div>
         <Coin size={180} spin />
       </section>
@@ -68,6 +69,7 @@ export default function App() {
       <Route path="/spiele/roulette" element={<Entrance key="roulette"><Roulette /></Entrance>} />
       <Route path="/spiele/blackjack" element={<Entrance key="blackjack"><Blackjack /></Entrance>} />
       <Route path="/spiele/poker" element={<Entrance key="poker"><VideoPoker /></Entrance>} />
+      <Route path="/spiele/rubbellose" element={<Entrance key="scratch"><Scratch /></Entrance>} />
       <Route path="/shop" element={<Shop />} />
       <Route path="/inventar" element={<Inventory />} />
       <Route path="/multiplayer" element={<Multiplayer />} />

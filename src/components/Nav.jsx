@@ -16,8 +16,8 @@ export default function Nav() {
         {routes.map(([to, label]) => <NavLink key={to} to={to} end={to === '/'}>{label}</NavLink>)}
       </nav>
       <SoundControl />
-      {p && <div className="wallet" title="Neon Coins, reine Spielwährung ohne Echtgeldwert">
-        <Coin size={26} /><b>{p.coins}</b><small>NC</small></div>}
+      {p && <div className="wallet" title="Royal Coins, reine Spielwährung ohne Echtgeldwert">
+        <Coin size={26} /><b>{p.coins}</b><small>RC</small></div>}
     </header>
   )
 }
