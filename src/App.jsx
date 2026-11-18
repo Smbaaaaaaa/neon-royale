@@ -10,7 +10,8 @@ import Logo from './components/Logo.jsx'
 import NameFx from './components/NameFx.jsx'
 import Slots from './components/Slots.jsx'
 import Roulette from './components/Roulette.jsx'
-import { Shop, Inventory, Profile } from './components/Pages.jsx'
+import { Shop, Inventory } from './components/Pages.jsx'
+import Profile from './components/ProfilePage.jsx'
 import Entrance from './components/Entrance.jsx'
 import Blackjack from './components/Blackjack.jsx'
 import VideoPoker from './components/VideoPoker.jsx'
@@ -75,6 +76,7 @@ export default function App() {
       <Route path="/multiplayer" element={<Multiplayer />} />
       <Route path="/rangliste" element={<Leaderboard />} />
       <Route path="/profil" element={<Profile />} />
+      <Route path="/profil/:id" element={<Profile />} />
     </Routes>
   </>)
 }

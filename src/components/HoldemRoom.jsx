@@ -30,6 +30,7 @@ export default function HoldemRoom({ room, act, busy }) {
   const minTo = Math.min(maxTo, Number(room.cbet) + Math.max(Number(room.minraise), bb))
   const canRaise = myTurn && maxTo > Number(room.cbet)
   const pot = Number(room.pot), live = room.phase === 'hand' || room.phase === 'showdown', myCards = room.my_hand?.hand
+  const ranked = room.mode === 'ranked', buyFix = bb * 50, netOf = id => Number(room.members?.find(m => m.user_id === id)?.net || 0)
   const myIdx = Math.max(0, seats.findIndex(s => s.user_id === p.id))
   const order = [...seats.slice(myIdx), ...seats.slice(0, myIdx)]
   useEffect(() => { setBuy(Math.min(maxBuy, minBuy * 2)) }, [bb])
@@ -54,7 +55,7 @@ export default function HoldemRoom({ room, act, busy }) {
         <div className="prail" />
         <div className="pfelt" />
         <div className="pcenter">
-          <div className="pot">Pot: <b>{fmt(pot)} RC</b> · Blinds {fmt(bb / 2)}/{fmt(bb)}{room.phase === 'hand' ? ` · ${{ preflop: 'Preflop', flop: 'Flop', turn: 'Turn', river: 'River' }[room.street]}` : ''}</div>
+          <div className="pot">Pot: <b>{fmt(pot)} RC</b> · Blinds {fmt(bb / 2)}/{fmt(bb)}{ranked ? ` · Preispool ${fmt(room.pool)} RC` : ''}{room.phase === 'hand' ? ` · ${{ preflop: 'Preflop', flop: 'Flop', turn: 'Turn', river: 'River' }[room.street]}` : ''}</div>
           <div className="cards board">{Array.from({ length: 5 }, (_, i) => board[i]
             ? <Card key={i + '' + board[i].r + board[i].s} c={board[i]} i={i} /> : <Card key={'e' + i} hidden />)}</div>
           {!seats.length && <p className="msg-felt">Noch niemand sitzt am Tisch.</p>}
@@ -73,6 +74,7 @@ export default function HoldemRoom({ room, act, busy }) {
                 <div className="pname"><NameFx name={s.name} fx={s.eq?.namefx} />{room.btn === s.seat && <span className="dbtn">D</span>}</div>
                 <Avatar size={30} frame={s.eq?.frame || 'silverline'} avatar={s.eq?.avatar || 'ace-of-spades'} />
                 <div className="pstack">{fmt(s.stack)}{s.allin && s.in_hand ? ' · All-in' : ''}</div>
+                <div className={'pnet ' + (netOf(s.user_id) >= 0 ? 'up' : 'down')}>{netOf(s.user_id) >= 0 ? '+' : ''}{fmt(netOf(s.user_id))} verdient</div>
                 {won && <div className="pwin">+{fmt(pay.won)}</div>}
                 {pay?.hole && !pay.folded && <div className="phand">{HANDS[pay.cat]}</div>}
               </div>
@@ -97,17 +99,26 @@ export default function HoldemRoom({ room, act, busy }) {
       {room.phase === 'hand' && !myTurn && <p className="muted center-t">{room.cur ? `${seats.find(s => s.user_id === room.cur)?.name || 'Jemand'} ist dran …` : 'Die Hand läuft …'}</p>}
       {host && room.phase === 'hand' && room.cur && room.cur !== p.id && <div className="row center"><button className="btn sm ghost" disabled={busy} onClick={() => go('holdem_skip')}>Spieler überspringen</button></div>}
 
+      {room.phase === 'finished' && <div className="tile seatpanel"><h2>Turnier beendet</h2><p>{(room.log || []).slice(-1)[0]}</p>
+        {host ? <button className="btn" disabled={busy} onClick={() => go('holdem_reset')}>Neues Turnier</button> : <p className="muted center-t">Der Gastgeber startet ein neues Turnier.</p>}</div>}
       {(room.phase === 'lobby' || room.phase === 'showdown') && <div className="tile seatpanel">
-        <h2>{me ? `Dein Stack: ${fmt(me.stack)} RC` : 'Setz dich an den Tisch'}</h2>
-        <p className="muted">Buy-in von {fmt(minBuy)} bis {fmt(maxBuy)} RC (20 bis 200 Big Blinds). Was du nicht verspielst, bekommst du beim Aufstehen zurück.</p>
-        <div className="row center"><input type="range" min={minBuy} max={maxBuy} step={bb} value={buy} onChange={e => setBuy(+e.target.value)} aria-label="Buy-in" />
-          <b>{fmt(buy)} RC</b></div>
-        <div className="row center">
-          <button className="btn" disabled={busy || buy > p.coins} onClick={() => go('holdem_sit', { p_buyin: buy })}>{me ? 'Chips nachkaufen' : 'Hinsetzen'}{buy > p.coins ? ' (zu wenig RC)' : ''}</button>
-          {me && <button className="btn ghost" disabled={busy} onClick={() => go('holdem_standup')}>Aufstehen und auszahlen</button>}</div>
+        {ranked ? <>
+          <h2>Ranked-Turnier: Der Sieger bekommt alles</h2>
+          <p className="muted">Alle zahlen {fmt(buyFix)} RC (50 Big Blinds) und starten mit gleich vielen Chips. Wer pleite ist, scheidet aus. Der letzte Spieler bekommt den ganzen Preispool von {fmt(room.pool)} RC. Nach dem Start gibt es kein Aufstehen und kein Nachkaufen, ein Verlassen verfällt den Einsatz.</p>
+          {!me && !room.started && <div className="row center"><button className="btn" disabled={busy || buyFix > p.coins} onClick={() => go('holdem_sit', { p_buyin: buyFix })}>Beitreten für {fmt(buyFix)} RC{buyFix > p.coins ? ' (zu wenig RC)' : ''}</button></div>}
+          {me && !room.started && <div className="row center"><button className="btn ghost" disabled={busy} onClick={() => go('holdem_standup')}>Turnier verlassen (Einsatz zurück)</button></div>}
+          {!me && room.started && <p className="muted center-t">Das Turnier läuft schon, du schaust zu.</p>}
+        </> : <>
+          <h2>{me ? `Dein Stack: ${fmt(me.stack)} RC` : 'Setz dich an den Tisch'}</h2>
+          <p className="muted">Friendly: Buy-in von {fmt(minBuy)} bis {fmt(maxBuy)} RC (20 bis 200 Big Blinds). Was du nicht verspielst, bekommst du beim Aufstehen zurück.</p>
+          <div className="row center"><input type="range" min={minBuy} max={maxBuy} step={bb} value={buy} onChange={e => setBuy(+e.target.value)} aria-label="Buy-in" /><b>{fmt(buy)} RC</b></div>
+          <div className="row center">
+            <button className="btn" disabled={busy || buy > p.coins} onClick={() => go('holdem_sit', { p_buyin: buy })}>{me ? 'Chips nachkaufen' : 'Hinsetzen'}{buy > p.coins ? ' (zu wenig RC)' : ''}</button>
+            {me && <button className="btn ghost" disabled={busy} onClick={() => go('holdem_standup')}>Aufstehen und auszahlen</button>}</div>
+        </>}
         {host && <div className="row center">
           {room.phase === 'lobby' && !seats.length && <label className="muted">Big Blind: <select value={bb} onChange={e => go('holdem_blinds', { p_bb: +e.target.value })}>{BBS.map(b => <option key={b} value={b}>{b}</option>)}</select></label>}
-          <button className="btn" disabled={busy || seats.filter(s => Number(s.stack) > 0).length < 2} onClick={() => go('holdem_deal')}>{room.phase === 'lobby' ? 'Hand starten' : 'Nächste Hand'}</button></div>}
+          <button className="btn" disabled={busy || seats.filter(s => Number(s.stack) > 0).length < 2} onClick={() => go('holdem_deal')}>{ranked && !room.started ? 'Turnier starten' : room.phase === 'lobby' ? 'Hand starten' : 'Nächste Hand'}</button></div>}
         {!host && <p className="muted center-t">Der Gastgeber teilt die Hand aus.</p>}
       </div>}
     </div>

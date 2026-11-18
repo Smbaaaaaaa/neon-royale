@@ -4,11 +4,11 @@ import { BETS } from '../games/registry.js'
 import { LINES, PAYS, spinGrid, evaluate, randSymbol, tier } from '../games/slotLogic.js'
 import { sfx, setVolume, setMuted, getAudio } from '../audio.js'
 import Coin from './Coin.jsx'
+import { Sym, SlotDefs } from './SlotSymbols.jsx'
+import Logo from './Logo.jsx'
 import { useWin } from './WinBanner.jsx'
 
 const NAMES = { cherry: 'Kirsche', lemon: 'Zitrone', bell: 'Glocke', bar: 'BAR', seven: 'Sieben', diamond: 'Diamant' }
-const GLYPH = { cherry: '🍒', lemon: '🍋', bell: '🔔', diamond: '💎' }
-const Sym = ({ s }) => <div className={`sym s-${s}`} aria-label={NAMES[s]}>{s === 'bar' ? <b>BAR</b> : s === 'seven' ? <b>7</b> : GLYPH[s]}</div>
 const initial = () => Array.from({ length: 3 }, randSymbol)
 const TRAVEL = 90
 
@@ -93,7 +93,7 @@ export default function Slots() {
 
   const hotCells = useMemo(() => {
     const m = Array.from({ length: 5 }, () => new Set())
-    result?.wins.forEach(w => { for (let i = 0; i < w.count; i++) m[i].add(LINES[w.line][i]) })
+    result?.wins.forEach(w => { for (let k = 0; k < w.count; k++) { const i = w.dir === -1 ? 4 - k : k; m[i].add(LINES[w.line][i]) } })
     return m
   }, [result])
 
@@ -105,14 +105,15 @@ export default function Slots() {
 
   return (
     <main className="slots-page">
+      <SlotDefs />
       <div className="machine-wrap">
         <div className={`machine skin-${p.eq.skin} ${result ? 'win-' + result.tier : ''}`}>
-          <div className="marquee"><span>SLOT MACHINE</span><i className="bulbs" /></div>
+          <div className="marquee"><span><Logo /><small>SLOT MACHINE</small></span><i className="bulbs" /></div>
           <div className="window">
             {spin.map((s, i) => <Reel key={i} index={i} spin={s} onStop={onStop} hot={hotCells[i]} />)}
             <svg className="lines" viewBox="0 0 5 3" preserveAspectRatio="none">
-              {result?.wins.map(w => <polyline key={w.line} className="wl" vectorEffect="non-scaling-stroke"
-                points={LINES[w.line].slice(0, w.count).map((r, i) => `${i + 0.5},${r + 0.5}`).join(' ')} />)}
+              {result?.wins.map(w => <polyline key={w.line + '-' + w.dir} className="wl" vectorEffect="non-scaling-stroke"
+                points={LINES[w.line].map((r, i) => [i, r]).filter(([i]) => (w.dir === -1 ? i >= 5 - w.count : i < w.count)).map(([i, r]) => `${i + 0.5},${r + 0.5}`).join(' ')} />)}
             </svg>
           </div>
           <div className="bets" role="group" aria-label="Einsatz wählen">{BETS.map(b => <button key={b} className={'bet' + (b === bet ? ' on' : '')} disabled={busy || b > p.coins} onClick={() => setBet(b)}>{b}</button>)}</div>
@@ -124,7 +125,7 @@ export default function Slots() {
           </div>
           <div className="msg" role="status">
             {p.coins < BETS[0] && !busy ? (rescueReady ? <button className="btn sm" onClick={claimRescue}>Nachschub: {RESCUE} RC holen</button> : 'Zu wenig Coins. Hol dir morgen den Tagesbonus in der Lobby.')
-              : result?.err ? result.err : result ? (result.tier === 'jackpot' ? 'JACKPOT!' : result.tier === 'big' ? 'Großer Gewinn!' : result.total ? 'Gewinn!' : 'Kein Gewinn, nochmal ziehen') : 'Zieh den Hebel oder tippe auf Drehen'}
+              : result?.err ? result.err : result ? (result.tier === 'jackpot' ? 'JACKPOT!' : result.tier === 'big' ? 'Großer Gewinn!' : result.total > result.bet ? 'Gewinn!' : result.total === result.bet ? 'Einsatz zurück' : result.total ? `Teilgewinn: ${result.total} RC (Einsatz ${result.bet} RC)` : 'Kein Gewinn, nochmal ziehen') : 'Zieh den Hebel oder tippe auf Drehen'}
           </div>
           <Tray burst={burst} />
         </div>
@@ -139,7 +140,7 @@ export default function Slots() {
         <table><thead><tr><th>Symbol</th><th>3×</th><th>4×</th><th>5×</th></tr></thead><tbody>
           {Object.entries(PAYS).map(([s, v]) => <tr key={s}><td><Sym s={s} /></td>{v.map((x, i) => <td key={i}>{Math.round(x * bet / 2)}</td>)}</tr>)}
         </tbody></table>
-        <p className="muted">Gleiche Symbole müssen auf einer Linie von links nach rechts liegen. Alle Ergebnisse sind zufällig und fair. Royal Coins haben keinen Echtgeldwert.</p>
+        <p className="muted">Drei oder mehr gleiche Symbole auf einer der 9 Linien gewinnen, gezählt von links und von rechts. Alle Ergebnisse sind zufällig und fair. Royal Coins haben keinen Echtgeldwert.</p>
       </details>
     </main>
   )

@@ -6,8 +6,8 @@ const DAILY = 1000, RESCUE = 10
 const today = () => new Date().toISOString().slice(0, 10)
 const shape = s => s?.profile ? {
   id: s.profile.id, name: s.profile.name, coins: Number(s.profile.coins), lastDaily: s.profile.last_daily, lastRescue: s.profile.last_rescue, lastBox: s.profile.last_box,
-  eq: s.profile.eq, inv: s.inventory || [], claims: s.claims || {},
-  stats: Object.fromEntries((s.stats || []).map(x => [x.game, { rounds: x.rounds, wins: x.wins, best: Number(x.best) }])),
+  eq: s.profile.eq, inv: s.inventory || [], claims: s.claims || {}, peak: Number(s.profile.peak || 0),
+  stats: Object.fromEntries((s.stats || []).map(x => [x.game, { rounds: x.rounds, wins: x.wins, best: Number(x.best), won: Number(x.won || 0) }])),
 } : null
 
 export function WalletProvider({ children }) {
