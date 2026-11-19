@@ -61,7 +61,7 @@ export default function Profile() {
             {own && <form onSubmit={async e => { e.preventDefault(); const b = await rename(n); if (b) { sfx.win('jackpot'); showWin(b, 'jackpot', 'NACHSCHUB') } }}>
               <input value={n} maxLength={16} onChange={e => setN(e.target.value)} aria-label="Spielername" /><button className="btn sm ghost" disabled={!n.trim() || n.trim() === p.name}>Umbenennen</button></form>}
             {own && <p className="wallet inl"><Coin size={26} /><b>{p.coins}</b><small>RC</small></p>}
-            <div className="pf-stats"><span>Insgesamt gewonnen <b>{fmt(totalWon)} RC</b></span><span>Höchstes Guthaben <b>{fmt(d.peak)} RC</b></span></div></div></div></div>
+            <div className="pf-stats"><span>Insgesamt gewonnen <b>{fmt(totalWon)} RC</b></span><span>All-Time-Höchststand <b>{fmt(d.peak)} RC</b></span></div></div></div></div>
       <ProfileTable eq={eq} seed={own ? p.id : id} />
       <h2 className="sec">Ausgerüstet</h2>
       <div className="grid">{Object.entries(TYPES).map(([t, label]) => { const it = ITEMS.find(i => i.type === t && i.val === eq[t])
