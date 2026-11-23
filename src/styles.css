@@ -583,3 +583,32 @@ html[data-chip="clown-chip"],.chipprev[data-chip="clown-chip"]{--chip-bg:repeati
 .lever .base{background:linear-gradient(90deg,#b8902f,#fff3b0,#8a6a1c);box-shadow:0 0 0 2px #5a3d06}
 .lever .knob{background:radial-gradient(circle at 35% 30%,#ffb0b5,#d4121f 55%,#6a050b);box-shadow:0 5px 10px #000a,inset 0 -3px 5px #0006}
 .paytable .sym{width:38px;height:38px;margin:auto}
+
+/* ---- 3D-Würfel ---- */
+.dwrap{--s:30px;display:inline-block;width:var(--s);height:var(--s);perspective:260px;filter:drop-shadow(0 5px 5px #000a)}
+.die{position:relative;display:block;width:100%;height:100%;padding:0;border:0;border-radius:0;background:none;box-shadow:none;transform-style:preserve-3d;
+ transform:rotateX(-24deg) rotateY(36deg) rotateX(calc(var(--ox) * 90deg)) rotateY(calc(var(--oy) * 90deg))}
+.die .f{position:absolute;inset:0;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:13%;box-sizing:border-box;border-radius:20%;background:var(--die-bg,#121214);border:1.5px solid var(--die-edge,#34343a);backface-visibility:hidden}
+.die .f1{transform:translateZ(calc(var(--s) / 2))}
+.die .f6{transform:rotateY(180deg) translateZ(calc(var(--s) / 2))}
+.die .f3{transform:rotateY(90deg) translateZ(calc(var(--s) / 2));filter:brightness(.82)}
+.die .f4{transform:rotateY(-90deg) translateZ(calc(var(--s) / 2));filter:brightness(.82)}
+.die .f2{transform:rotateX(90deg) translateZ(calc(var(--s) / 2));filter:brightness(1.15)}
+.die .f5{transform:rotateX(-90deg) translateZ(calc(var(--s) / 2));filter:brightness(.7)}
+.die .f i{border-radius:50%;margin:8%}.die .f i.on{background:var(--die-pip,#ece6d8);box-shadow:inset 0 -1px 2px #0006}
+.tdice .dwrap{--s:34px}.tdice .dwrap:nth-child(2){transform:rotate(12deg) translateY(-3px)}.ptdice .dwrap{--s:26px}.ptdice .die{width:100%;height:100%}
+/* ---- Teure Würfel (Episch bis Mythisch) als Glas: gleiches Design, durchsichtig mit Glanz ---- */
+html[data-dice="obsidian"] .die .f,.diceprev[data-dice="obsidian"] .die .f,html[data-dice="emerald"] .die .f,.diceprev[data-dice="emerald"] .die .f,html[data-dice="smoked-glass"] .die .f,.diceprev[data-dice="smoked-glass"] .die .f,html[data-dice="platinum"] .die .f,.diceprev[data-dice="platinum"] .die .f,html[data-dice="silver-agent"] .die .f,.diceprev[data-dice="silver-agent"] .die .f,html[data-dice="liquid-void"] .die .f,.diceprev[data-dice="liquid-void"] .die .f,html[data-dice="eternal"] .die .f,.diceprev[data-dice="eternal"] .die .f,html[data-dice="harlequin-dice"] .die .f,.diceprev[data-dice="harlequin-dice"] .die .f{opacity:.64;backface-visibility:visible;border-color:#ffffffcc;box-shadow:inset 0 0 10px #ffffffaa,inset 0 0 0 1px #ffffffcc}
+html[data-dice="obsidian"] .die .f::before,.diceprev[data-dice="obsidian"] .die .f::before,html[data-dice="emerald"] .die .f::before,.diceprev[data-dice="emerald"] .die .f::before,html[data-dice="smoked-glass"] .die .f::before,.diceprev[data-dice="smoked-glass"] .die .f::before,html[data-dice="platinum"] .die .f::before,.diceprev[data-dice="platinum"] .die .f::before,html[data-dice="silver-agent"] .die .f::before,.diceprev[data-dice="silver-agent"] .die .f::before,html[data-dice="liquid-void"] .die .f::before,.diceprev[data-dice="liquid-void"] .die .f::before,html[data-dice="eternal"] .die .f::before,.diceprev[data-dice="eternal"] .die .f::before,html[data-dice="harlequin-dice"] .die .f::before,.diceprev[data-dice="harlequin-dice"] .die .f::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,#ffffff77,transparent 45%);pointer-events:none}
+/* ---- Profiltisch kleiner, Objekte enger ---- */
+.ptrail{max-width:480px;margin:1rem auto;padding:10px}.pt-felt{aspect-ratio:16/7.5}
+.ptcard{width:clamp(32px,6vw,46px);margin-top:-28px}.chipstack i{width:42px;height:12px;margin-top:-8px}.loose i{width:22px;height:22px}.chipprev.loose{width:46px;height:36px}
+/* ---- Freunde ---- */
+.fr-codeline{display:flex;align-items:center;gap:1rem;margin:.4rem 0 .8rem;flex-wrap:wrap}.fr-code{font:800 1.8rem Fraunces,serif;letter-spacing:.25em;color:var(--gold)}
+.fr-row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;padding:.5rem 0;border-bottom:1px solid var(--line)}.fr-row>span:first-child{flex:1;min-width:160px}
+.fr-send{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;padding:.4rem 0 .8rem}.friends .tile{margin-bottom:1rem}.fr-list{padding:0 1rem 1rem}.invbox{margin:.8rem 0}
+.nbadge{margin-left:.4rem;background:var(--accent);color:var(--accent-ink);border-radius:99px;font-size:.7rem;font-weight:700;padding:.05rem .45rem}
+
+/* ---- Korrektur: ROYALE im Slot-Schriftzug in einer Zeile, All-in-Taste ---- */
+.marquee span{display:inline}.marquee>span{display:block}.marquee .logo-t{display:inline}.marquee .logo-e{display:inline-block}
+.bet.allin{border-color:#d4121f;color:#ffb3b8;font-weight:700}.bet.allin.on{background:#d4121f;color:#fff;border-color:#ffb3b8;box-shadow:none}

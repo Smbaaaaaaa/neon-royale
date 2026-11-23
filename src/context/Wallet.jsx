@@ -6,7 +6,7 @@ const DAILY = 1000, RESCUE = 10
 const today = () => new Date().toISOString().slice(0, 10)
 const shape = s => s?.profile ? {
   id: s.profile.id, name: s.profile.name, coins: Number(s.profile.coins), lastDaily: s.profile.last_daily, lastRescue: s.profile.last_rescue, lastBox: s.profile.last_box,
-  eq: s.profile.eq, inv: s.inventory || [], claims: s.claims || {}, peak: Number(s.profile.peak || 0),
+  eq: s.profile.eq, inv: s.inventory || [], claims: s.claims || {}, peak: Number(s.profile.peak || 0), friendCode: s.profile.friend_code,
   stats: Object.fromEntries((s.stats || []).map(x => [x.game, { rounds: x.rounds, wins: x.wins, best: Number(x.best), won: Number(x.won || 0) }])),
 } : null
 
@@ -23,6 +23,9 @@ export function WalletProvider({ children }) {
     setReady(true)
   })() }, [refresh])
 
+  const [social, setSocial] = useState(null)
+  const refreshSocial = useCallback(async () => { const { data, error } = await supabase.rpc('social_state'); if (!error) setSocial(data) }, [])
+  useEffect(() => { if (!p?.id) return; refreshSocial(); const t = setInterval(refreshSocial, 10000); return () => clearInterval(t) }, [p?.id, refreshSocial])
   // Ruft eine Server-Funktion auf und lädt danach den Zustand neu
   const act = async (fn, args) => {
     const { data, error } = await supabase.rpc(fn, args)
@@ -52,7 +55,7 @@ export function WalletProvider({ children }) {
   const rename = async n => { const r = await act('rename_profile', { p_name: n }); return r.error ? 0 : Number(r.data) }
   const claimDaily = () => act('claim_daily')
   const claimRescue = () => act('claim_rescue')
-  return <Ctx.Provider value={{ p, ready, error, createGuest, refresh, adjust, buy, claimBonus, equip, rename, claimDaily, claimRescue, DAILY, RESCUE,
+  return <Ctx.Provider value={{ p, ready, error, createGuest, refresh, adjust, buy, claimBonus, social, refreshSocial, equip, rename, claimDaily, claimRescue, DAILY, RESCUE,
     call: play, playSlots: bet => play('play_slots', { p_bet: bet }), playRoulette: bets => play('play_roulette', { p_bets: bets }),
     dailyReady: !!p && p.lastDaily !== today(), dailyBoxReady: !!p && p.lastBox !== today(), rescueReady: !!p && p.coins < 2 && p.lastRescue !== today() }}>{children}</Ctx.Provider>
 }

@@ -1,11 +1,11 @@
 // Faire Slot-Logik: Ergebnisse kommen aus crypto.getRandomValues, die Gewichte unten sind öffentlich.
 // Gewinn: 3, 4 oder 5 gleiche Symbole auf einer der 9 Linien, gezählt von LINKS und von RECHTS.
 export const SYMBOLS = ['cherry', 'lemon', 'bell', 'bar', 'seven', 'diamond']
-export const WEIGHTS = { cherry: 30, lemon: 26, bell: 18, bar: 12, seven: 8, diamond: 5 }
+export const WEIGHTS = { cherry: 33, lemon: 28, bell: 17, bar: 11, seven: 7, diamond: 4 }
 // Auszahlung in RC pro Linie bei 3 / 4 / 5 gleichen Symbolen (gilt für 2 RC Einsatz, skaliert mit dem Einsatz)
 export const PAYS = {
-  cherry: [1, 2, 6], lemon: [1, 3, 9], bell: [2, 5, 15],
-  bar: [3, 10, 30], seven: [8, 24, 85], diamond: [13, 40, 150],
+  cherry: [1, 2, 7], lemon: [1, 3, 10], bell: [2, 6, 17],
+  bar: [4, 11, 34], seven: [9, 27, 95], diamond: [15, 45, 170],
 }
 // Reihe (0 oben, 2 unten) pro Walze
 export const LINES = [

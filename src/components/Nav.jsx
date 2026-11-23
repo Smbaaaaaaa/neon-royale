@@ -8,12 +8,13 @@ export const routes = [
   ['/multiplayer', 'Multiplayer'], ['/rangliste', 'Rangliste'], ['/profil', 'Profil'],
 ]
 export default function Nav() {
-  const { p } = useWallet()
+  const { p, social } = useWallet()
+  const badge = to => { const n = to === '/profil' ? social?.incoming?.length : to === '/multiplayer' ? social?.invites?.length : 0; return n ? <span className="nbadge">{n}</span> : null }
   return (
     <header className="nav">
       <NavLink to="/" className="logo"><Logo /></NavLink>
       <nav aria-label="Hauptnavigation">
-        {routes.map(([to, label]) => <NavLink key={to} to={to} end={to === '/'}>{label}</NavLink>)}
+        {routes.map(([to, label]) => <NavLink key={to} to={to} end={to === '/'}>{label}{badge(to)}</NavLink>)}
       </nav>
       <SoundControl />
       {p && <div className="wallet" title="Royal Coins, reine Spielwährung ohne Echtgeldwert">

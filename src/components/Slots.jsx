@@ -116,7 +116,8 @@ export default function Slots() {
                 points={LINES[w.line].map((r, i) => [i, r]).filter(([i]) => (w.dir === -1 ? i >= 5 - w.count : i < w.count)).map(([i, r]) => `${i + 0.5},${r + 0.5}`).join(' ')} />)}
             </svg>
           </div>
-          <div className="bets" role="group" aria-label="Einsatz wählen">{BETS.map(b => <button key={b} className={'bet' + (b === bet ? ' on' : '')} disabled={busy || b > p.coins} onClick={() => setBet(b)}>{b}</button>)}</div>
+          <div className="bets" role="group" aria-label="Einsatz wählen">{BETS.map(b => <button key={b} className={'bet' + (b === bet ? ' on' : '')} disabled={busy || b > p.coins} onClick={() => setBet(b)}>{b.toLocaleString('de-DE')}</button>)}
+          <button className={'bet allin' + (bet === Math.min(p.coins, 2000000000) && !BETS.includes(bet) ? ' on' : '')} disabled={busy || p.coins < 2} onClick={() => setBet(Math.min(p.coins, 2000000000))} title="Alle RC setzen">All-in</button></div>
           <div className="panel">
             <div className="lcd"><small>Guthaben</small><b>{p.coins}</b></div>
             <button className="spin-btn" onClick={() => { setPull(1); setTimeout(() => setPull(0), 180); doSpin() }} disabled={!canSpin}>

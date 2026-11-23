@@ -44,7 +44,7 @@ export default function PokerRoom({ room, act, busy }) {
       </div></div>
       <div className="row center">
         {room.phase === 'lobby' && host && <>
-          <BetBar bet={ante} setBet={setAnte} coins={p.coins} label="Einsatz pro Spieler" />
+          <BetBar bet={ante} setBet={setAnte} coins={p.coins} label="Einsatz pro Spieler" allin={false} />
           <button className="btn" disabled={busy || room.members.length < 2} onClick={() => act('poker_start', { p_ante: ante })}>Runde starten, {ante} RC</button></>}
         {room.phase === 'draw' && mh && !mh.done && <button className="btn" disabled={busy} onClick={() => act('poker_exchange', { p_held: held })}>Karten tauschen</button>}
         {room.phase === 'draw' && host && <button className="btn ghost" disabled={busy} onClick={() => act('poker_force')}>Runde erzwingen</button>}

@@ -10,6 +10,7 @@ import NameFx from './NameFx.jsx'
 import Coin from './Coin.jsx'
 import { Die } from './TableDice.jsx'
 import { useWin } from './WinBanner.jsx'
+import FriendsPanel from './FriendsPanel.jsx'
 const fmt = n => Number(n).toLocaleString('de-DE')
 const hash = s => { let h = 1779033703 ^ s.length; for (let i = 0; i < s.length; i++) { h = Math.imul(h ^ s.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19) } return h >>> 0 }
 const rng = seed => () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296 }
@@ -17,9 +18,9 @@ const rng = seed => () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(se
 // Kleiner Tisch: Karten, Chipstapel, lose Chips und Würfel liegen zufällig, aber bei jedem Spieler immer gleich, im Design des Spielers
 function ProfileTable({ eq, seed }) {
   const L = useMemo(() => {
-    const r = rng(hash(String(seed))), zones = [[24, 42], [52, 38], [78, 46], [34, 76], [68, 76]]
+    const r = rng(hash(String(seed))), zones = [[31, 42], [51, 38], [70, 46], [39, 70], [62, 72]]
     for (let i = zones.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [zones[i], zones[j]] = [zones[j], zones[i]] }
-    const at = z => ({ left: z[0] + (r() - 0.5) * 7 + '%', top: z[1] + (r() - 0.5) * 7 + '%' })
+    const at = z => ({ left: z[0] + (r() - 0.5) * 4 + '%', top: z[1] + (r() - 0.5) * 4 + '%' })
     const cards = Array.from({ length: 4 }, (_, i) => ({ r: 2 + Math.floor(r() * 13), s: Math.floor(r() * 4), up: i < 2 || r() > 0.5, rot: (i - 1.5) * (11 + r() * 5) + (r() - 0.5) * 8, dx: (i - 1.5) * 15, dy: (r() - 0.5) * 8 }))
     cards[3].up = false
     return { fan: at(zones[0]), stack: at(zones[1]), dice: at(zones[2]), loose: at(zones[3]), single: at(zones[4]), cards, h: 6 + Math.floor(r() * 4),
@@ -39,7 +40,7 @@ function ProfileTable({ eq, seed }) {
 }
 
 export default function Profile() {
-  const { id } = useParams(), nav = useNavigate(), { p, call, rename } = useWallet(), showWin = useWin()
+  const { id } = useParams(), nav = useNavigate(), { p, call, rename, social, refreshSocial } = useWallet(), showWin = useWin()
   const own = !id || id === p.id
   const [other, setOther] = useState(null), [err, setErr] = useState(''), [n, setN] = useState(p.name)
   useEffect(() => {
@@ -54,7 +55,12 @@ export default function Profile() {
   const eq = { ...p.eq, ...d.eq }
   return (
     <main className="profile">
-      {!own && <button className="btn sm ghost" onClick={() => nav(-1)}>Zurück</button>}
+      {!own && <div className="row"><button className="btn sm ghost" onClick={() => nav(-1)}>Zurück</button>
+        {(() => { const rel = !social ? 'none' : social.friends.some(f => f.id === id) ? 'friend' : social.outgoing.some(f => f.id === id) ? 'out' : social.incoming.some(f => f.id === id) ? 'in' : 'none'
+          const act = async (fn, args) => { await call(fn, args); refreshSocial() }
+          return rel === 'friend' ? <span className="tag">Befreundet</span> : rel === 'out' ? <span className="tag">Anfrage gesendet</span>
+            : rel === 'in' ? <button className="btn sm" onClick={() => act('friend_respond', { p_id: id, p_accept: true })}>Anfrage annehmen</button>
+            : <button className="btn sm" onClick={() => act('friend_add_by_id', { p_id: id })}>Freund hinzufügen</button> })()}</div>}
       <div className="pf-card"><div className="bgprev pf-banner" data-bg={eq.bg} />
         <div className="pf-head"><Avatar size={96} frame={eq.frame} avatar={eq.avatar} />
           <div className="pf-info"><h1><NameFx name={d.name} fx={eq.namefx} /></h1>
@@ -74,6 +80,7 @@ export default function Profile() {
         {[...games, { id: 'ranked', name: 'Ranked-Turniere' }].map(g => { const s = d.stats[g.id] || { rounds: 0, wins: 0, best: 0 }
           return <tr key={g.id}><td>{g.name}</td><td>{s.rounds}</td><td>{s.wins}</td><td>{s.rounds ? Math.round(s.wins / s.rounds * 100) + ' %' : '–'}</td><td>{fmt(s.best)} RC</td></tr> })}
       </tbody></table>
+      {own && <FriendsPanel />}
     </main>
   )
 }
