@@ -42,7 +42,7 @@ const BoxSvg = ({ toxic, cls, style }) => (
   </svg>
 )
 function MysteryBox({ kind }) {
-  const cfg = BOXES[kind], { p, call, refresh, dailyBoxReady } = useWallet(), [st, setSt] = useState(null), timers = useRef([])
+  const cfg = BOXES[kind], { p, call, refresh, dailyBoxReady, equip } = useWallet(), [st, setSt] = useState(null), timers = useRef([])
   const later = (fn, ms) => timers.current.push(setTimeout(fn, ms))
   useEffect(() => () => timers.current.forEach(clearTimeout), [])
   const close = () => { timers.current.forEach(clearTimeout); timers.current = []; setSt(null) }
@@ -74,7 +74,7 @@ function MysteryBox({ kind }) {
         {st.phase === 'error' && <><p>{st.msg}</p><button className="btn" onClick={close}>Schließen</button></>}
         {st.phase === 'reveal' && it && <div className={'mbox-result r-' + rar}><div className="mbox-rar">{RAR[rar].toUpperCase()}{rar === 'mythic' ? '!' : ''}</div><Preview it={it} /><h2>{it.name}</h2><p className="muted">{TYPES[it.type]}</p>
           <p>{st.r.duplicate ? `Schon vorhanden. Du bekommst ${fmt(st.r.refund)} RC zurück.` : 'Neu in deinem Inventar!'}</p>
-          <div className="row center"><button className="btn" onClick={close}>Weiter</button><button className="btn ghost" disabled={p.coins < cfg.cost} onClick={again}>Nochmal, {fmt(cfg.cost)} RC</button></div></div>}
+          <div className="row center"><button className="btn" onClick={close}>Weiter</button><button className="btn ghost" disabled={st.equipped} onClick={async () => { await equip(it.type, it.val); sfx.chip(); setSt(s => ({ ...s, equipped: true })) }}>{st.equipped ? 'Ausgerüstet ✓' : 'Ausrüsten'}</button></div></div>}
       </div>}
     </section>
   )

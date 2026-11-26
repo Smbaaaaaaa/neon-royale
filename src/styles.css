@@ -612,3 +612,41 @@ html[data-dice="obsidian"] .die .f::before,.diceprev[data-dice="obsidian"] .die 
 /* ---- Korrektur: ROYALE im Slot-Schriftzug in einer Zeile, All-in-Taste ---- */
 .marquee span{display:inline}.marquee>span{display:block}.marquee .logo-t{display:inline}.marquee .logo-e{display:inline-block}
 .bet.allin{border-color:#d4121f;color:#ffb3b8;font-weight:700}.bet.allin.on{background:#d4121f;color:#fff;border-color:#ffb3b8;box-shadow:none}
+/* ---- Spielautomat-Gehäuse ---- */
+.cab{width:min(560px,100%);margin:1rem auto;border-radius:22px 22px 10px 10px;background:linear-gradient(90deg,#08080a,#1c1c21 12%,#111114 50%,#1c1c21 88%,#08080a);border:2px solid #34343a;box-shadow:0 30px 60px #000c,inset 0 1px 0 #ffffff1c;padding:12px 16px 0}
+.cab-top{background:linear-gradient(#3a0c14,#12040a);border:2px solid #c9a24a;border-radius:14px 14px 4px 4px;text-align:center;padding:.55rem;box-shadow:inset 0 0 14px #000}
+.cab-title{font:800 clamp(1.1rem,4vw,1.7rem) Fraunces,serif;letter-spacing:.2em;color:#f6dc86;text-shadow:0 2px 0 #5a3d06;text-transform:uppercase}
+.cab-bezel{margin:12px 0;padding:14px;background:#030304;border-radius:18px;box-shadow:inset 0 0 20px #000,0 0 0 2px #2a2a30,0 0 0 4px #0b0b0d}
+.cab-screen{position:relative;border-radius:10px;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#1b1d26,#07070a 80%);min-height:340px;display:grid;place-items:center;align-content:center;gap:.4rem;padding:.6rem}
+.cab-glass{position:absolute;inset:0;pointer-events:none;background:linear-gradient(160deg,#ffffff1c,transparent 30%),repeating-linear-gradient(transparent 0 2px,#00000030 2px 3px)}
+.cab-deck{background:linear-gradient(#2a2a30,#121215);border-top:3px solid #4a4a52;border-radius:6px 6px 0 0;padding:.9rem;display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:center;box-shadow:inset 0 2px 0 #ffffff1c}
+.cab-stick{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#555,#111);display:grid;place-items:center}
+.cab-stick i{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9aa0,#d4121f 60%,#6a050b);box-shadow:0 4px 6px #000a}
+.cab-btns{display:flex;gap:.4rem}.cab-btns i{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#c9a24a 60%,#6b4e10);box-shadow:0 3px 4px #000a}
+.cab-btns i:nth-child(2){background:radial-gradient(circle at 35% 30%,#ffb0b5,#b3202e 60%,#5a0a10)}
+.cab-controls{display:grid;gap:.6rem;justify-items:center;min-width:0}
+.cab-base{background:#0a0a0c;height:84px;display:grid;place-items:start center;padding-top:14px;border-top:2px solid #2a2a30}
+.cab-slot{width:130px;height:46px;border:3px solid #c9a24a;border-radius:8px;background:#000;display:grid;place-items:center;position:relative}
+.cab-slot::before{content:"";width:62%;height:5px;background:#222;box-shadow:inset 0 1px 2px #000;border-radius:3px}.cab-slot span{position:absolute;bottom:-1.3rem;font-size:.62rem;letter-spacing:.3em;color:#9a968d;white-space:nowrap}
+.arc-btn{background:radial-gradient(circle at 50% 20%,#ff7a80,#d4121f 55%,#7a0710);color:#fff;border:3px solid #f0d27a;border-radius:99px;padding:.7rem 1.6rem;font:800 1rem Outfit,sans-serif;cursor:pointer;box-shadow:0 5px 0 #3a0508,0 8px 12px #000a,inset 0 2px 4px #ffffff66;text-shadow:0 1px 2px #000}
+.arc-btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 2px 0 #3a0508}.arc-btn:disabled{opacity:.5;cursor:not-allowed}
+.cab-msg{margin:0;color:#ffe9a0;font-weight:700;text-align:center;min-height:1.5rem}
+.plinko{width:100%;max-width:360px;display:block}.bucket{fill:#18181c;stroke:#5a5d64}.bucket.mid{fill:#2a1a1e}.bucket.hi{fill:#5a1a22;stroke:#c9a24a}.bucket.hit{fill:#c9a24a;stroke:#fff}
+.bt{fill:#efe9dc;font:700 8px Outfit,sans-serif}.bucket.hit+.bt{fill:#1a1204}
+.wheelbox{position:relative;width:min(300px,82%);aspect-ratio:1}.wheelsvg{width:100%;height:100%;display:block}
+.wpointer{position:absolute;top:-6px;left:50%;translate:-50% 0;border:11px solid transparent;border-top:20px solid #f0d27a;filter:drop-shadow(0 2px 2px #000)}
+.tosser{width:160px;height:160px;perspective:700px;display:grid;place-items:center}.tosser.toss{animation:tossup 2.2s ease-in-out}
+@keyframes tossup{0%,100%{translate:0 0;scale:1}45%{translate:0 -70px;scale:1.35}}
+.flipcoin{position:relative;width:150px;height:150px;transform-style:preserve-3d;transition:transform 2.2s cubic-bezier(.2,.7,.2,1)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;display:grid;place-items:center}.fc-back{transform:rotateY(180deg)}
+.dicetable{min-height:340px;display:grid;place-items:center;align-content:center;gap:.6rem;padding:1rem}
+.bigdice{display:flex;gap:1.6rem;justify-content:center;margin:.4rem 0}.bigdice .dwrap{--s:70px}
+.die.rolling{animation:dicespin .8s linear infinite}@keyframes dicespin{to{transform:rotateX(720deg) rotateY(1080deg)}}
+.dfields{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;width:100%}
+.dfield{position:relative;display:grid;gap:.1rem;padding:.7rem .5rem;text-align:center}.dfield small{color:var(--gold)}
+/* ---- Quests ---- */
+.quest{display:grid;gap:.5rem}.quest.claimed{opacity:.55}.qdiff{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.qdiff.d-easy{color:#8d9199}.qdiff.d-medium{color:#c4505f}.qdiff.d-hard{color:#c9a24a}
+.quest.d-medium{border-top:2px solid #b4384c}.quest.d-hard{border-top:2px solid #c9a24a}.quest.d-easy{border-top:2px solid #6d6d74}
+.qbar{height:10px;border-radius:99px;background:#1a1a1e;border:1px solid #2a2a30;overflow:hidden}.qbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#fff);border-radius:99px;transition:width .4s}
+@media(prefers-reduced-motion:reduce){.tosser.toss,.die.rolling{animation:none}.flipcoin,.wheelsvg{transition-duration:.01s!important}}

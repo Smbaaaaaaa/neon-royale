@@ -18,6 +18,11 @@ import VideoPoker from './components/VideoPoker.jsx'
 import Multiplayer from './components/Multiplayer.jsx'
 import Leaderboard from './components/Leaderboard.jsx'
 import Scratch from './components/Scratch.jsx'
+import Plinko from './components/Plinko.jsx'
+import Wheel from './components/Wheel.jsx'
+import CoinFlip from './components/CoinFlip.jsx'
+import DiceGame from './components/DiceGame.jsx'
+import Quests from './components/Quests.jsx'
 
 function Welcome() {
   const { createGuest, error } = useWallet(); const [n, setN] = useState(''), [busy, setBusy] = useState(false)
@@ -71,6 +76,11 @@ export default function App() {
       <Route path="/spiele/blackjack" element={<Entrance key="blackjack"><Blackjack /></Entrance>} />
       <Route path="/spiele/poker" element={<Entrance key="poker"><VideoPoker /></Entrance>} />
       <Route path="/spiele/rubbellose" element={<Entrance key="scratch"><Scratch /></Entrance>} />
+      <Route path="/spiele/plinko" element={<Entrance key="plinko"><Plinko /></Entrance>} />
+      <Route path="/spiele/gluecksrad" element={<Entrance key="wheel"><Wheel /></Entrance>} />
+      <Route path="/spiele/muenzwurf" element={<Entrance key="coin"><CoinFlip /></Entrance>} />
+      <Route path="/spiele/wuerfeltisch" element={<Entrance key="dice"><DiceGame /></Entrance>} />
+      <Route path="/quests" element={<Quests />} />
       <Route path="/shop" element={<Shop />} />
       <Route path="/inventar" element={<Inventory />} />
       <Route path="/multiplayer" element={<Multiplayer />} />

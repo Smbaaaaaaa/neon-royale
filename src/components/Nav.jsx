@@ -4,12 +4,12 @@ import Coin from './Coin.jsx'
 import Logo from './Logo.jsx'
 import SoundControl from './SoundControl.jsx'
 export const routes = [
-  ['/', 'Lobby'], ['/spiele', 'Spiele'], ['/shop', 'Item-Shop'], ['/inventar', 'Inventar'],
+  ['/', 'Lobby'], ['/spiele', 'Spiele'], ['/quests', 'Quests'], ['/shop', 'Item-Shop'], ['/inventar', 'Inventar'],
   ['/multiplayer', 'Multiplayer'], ['/rangliste', 'Rangliste'], ['/profil', 'Profil'],
 ]
 export default function Nav() {
-  const { p, social } = useWallet()
-  const badge = to => { const n = to === '/profil' ? social?.incoming?.length : to === '/multiplayer' ? social?.invites?.length : 0; return n ? <span className="nbadge">{n}</span> : null }
+  const { p, social, quests } = useWallet()
+  const badge = to => { const n = to === '/profil' ? social?.incoming?.length : to === '/multiplayer' ? social?.invites?.length : to === '/quests' ? (quests || []).filter(q => Number(q.value) >= Number(q.target) && !q.claimed).length : 0; return n ? <span className="nbadge">{n}</span> : null }
   return (
     <header className="nav">
       <NavLink to="/" className="logo"><Logo /></NavLink>

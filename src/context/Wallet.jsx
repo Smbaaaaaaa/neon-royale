@@ -26,6 +26,9 @@ export function WalletProvider({ children }) {
   const [social, setSocial] = useState(null)
   const refreshSocial = useCallback(async () => { const { data, error } = await supabase.rpc('social_state'); if (!error) setSocial(data) }, [])
   useEffect(() => { if (!p?.id) return; refreshSocial(); const t = setInterval(refreshSocial, 10000); return () => clearInterval(t) }, [p?.id, refreshSocial])
+  const [quests, setQuests] = useState(null)
+  const refreshQuests = useCallback(async () => { const { data, error } = await supabase.rpc('quest_list'); if (!error) setQuests(data) }, [])
+  useEffect(() => { if (p?.id) refreshQuests() }, [p?.id, p?.coins, refreshQuests])
   // Ruft eine Server-Funktion auf und lädt danach den Zustand neu
   const act = async (fn, args) => {
     const { data, error } = await supabase.rpc(fn, args)
@@ -55,7 +58,7 @@ export function WalletProvider({ children }) {
   const rename = async n => { const r = await act('rename_profile', { p_name: n }); return r.error ? 0 : Number(r.data) }
   const claimDaily = () => act('claim_daily')
   const claimRescue = () => act('claim_rescue')
-  return <Ctx.Provider value={{ p, ready, error, createGuest, refresh, adjust, buy, claimBonus, social, refreshSocial, equip, rename, claimDaily, claimRescue, DAILY, RESCUE,
+  return <Ctx.Provider value={{ p, ready, error, createGuest, refresh, adjust, buy, claimBonus, social, refreshSocial, quests, refreshQuests, equip, rename, claimDaily, claimRescue, DAILY, RESCUE,
     call: play, playSlots: bet => play('play_slots', { p_bet: bet }), playRoulette: bets => play('play_roulette', { p_bets: bets }),
     dailyReady: !!p && p.lastDaily !== today(), dailyBoxReady: !!p && p.lastBox !== today(), rescueReady: !!p && p.coins < 2 && p.lastRescue !== today() }}>{children}</Ctx.Provider>
 }

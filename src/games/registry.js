@@ -5,5 +5,9 @@ export const games = [
   { id: 'blackjack', name: 'Blackjack', blurb: 'Schlag den Dealer, ohne über 21 zu gehen.', path: '/spiele/blackjack' },
   { id: 'poker', name: 'Video Poker', blurb: 'Jacks or Better: halte die besten Karten.', path: '/spiele/poker' },
   { id: 'scratch', name: 'Rubbellose', blurb: 'Rubble die Folie mit der Royal-Münze frei.', path: '/spiele/rubbellose' },
+  { id: 'plinko', name: 'Royal Plinko', blurb: 'Automat: Die Kugel fällt durch die Stifte, die Ränder zahlen am meisten.', path: '/spiele/plinko' },
+  { id: 'wheel', name: 'Glücksrad', blurb: 'Automat: Dreh am Rad, bis zu 4-fach.', path: '/spiele/gluecksrad' },
+  { id: 'coinflip', name: 'Münzwurf', blurb: 'Automat: Kopf oder Zahl mit der Royal-Münze.', path: '/spiele/muenzwurf' },
+  { id: 'dice', name: 'Würfeltisch', blurb: 'Zwei 3D-Würfel, Wetten auf Summe, Pasch und mehr.', path: '/spiele/wuerfeltisch' },
   { id: 'holdem', name: "Texas Hold'em", blurb: 'Mehrspieler-Poker mit Blinds, Erhöhen und All-in.', path: '/multiplayer' },
 ]

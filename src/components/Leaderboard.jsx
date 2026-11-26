@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useWallet } from '../context/Wallet.jsx'
 import Avatar from './Avatar.jsx'
 import NameFx from './NameFx.jsx'
-const GAMES = [['all', 'Gesamt'], ['slots', 'Slot Machine'], ['roulette', 'Roulette'], ['blackjack', 'Blackjack'], ['poker', 'Video Poker'], ['holdem', "Texas Hold'em"], ['scratch', 'Rubbellose'], ['ranked', 'Ranked-Turniere']]
+const GAMES = [['all', 'Gesamt'], ['slots', 'Slot Machine'], ['roulette', 'Roulette'], ['blackjack', 'Blackjack'], ['poker', 'Video Poker'], ['holdem', "Texas Hold'em"], ['scratch', 'Rubbellose'], ['plinko', 'Royal Plinko'], ['wheel', 'Glücksrad'], ['coinflip', 'Münzwurf'], ['dice', 'Würfeltisch'], ['ranked', 'Ranked-Turniere']]
 const TABLES = [['rounds', 'Gespielte Runden'], ['won', 'Insgesamt gewonnen'], ['peak', 'Höchstes Guthaben (All-Time)']]
 const fmt = n => Number(n).toLocaleString('de-DE')
 export default function Leaderboard() {
